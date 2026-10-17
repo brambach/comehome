@@ -97,3 +97,26 @@ $ pnpm exec playwright test
 ```
 
 Screenshots of the seeded pet with 8 sightings: `docs/screenshots/m3-corridor-mobile.png`, `docs/screenshots/m3-corridor-desktop.png`
+
+## M4: flyer and OG image
+
+- `/p/[slug]/flyer.pdf`: letter-size PDF from `@react-pdf/renderer` (`src/lib/flyer.tsx`). It has the photo, the name as large as the line allows, last seen, description, a QR code from `qrcode`, and the short URL. Ink on white, because flyers get photocopied.
+- `/p/[slug]/opengraph-image`: 1200×630 PNG via `next/og`, with the photo on the left, the name in Fraunces, last seen, and a "Seen them? Tap to report" pill. A found pet switches to a "home" version. `generateMetadata` sets the title to "Lost dog: Juniper" and adds the description.
+- The fonts are vendored into `assets/fonts/` (OFL, licenses alongside) and traced via `outputFileTracingIncludes`, so the PDF and OG routes can read them on Vercel.
+- `docs/flyer-sample.pdf` is the seeded Juniper rendered with `SITE_URL=https://comehome.example`, a placeholder until there's a real domain. The QR encodes `https://comehome.example/p/juniper-demo`.
+
+```
+$ pnpm test
+ ✓ tests/unit/flyer.test.ts (3 tests)
+   - renders a letter-size PDF whose QR code opens the pet page
+       pdfinfo: Pages 1, 612 x 792 pts (letter); pdftoppm → jsQR decodes "https://comehome.test/p/juniper-k7q2"
+   - stays on one page with the longest name and description
+   - sizes long names down so they fit
+      Tests  22 passed (22)
+
+$ pnpm exec playwright test
+[2/8] share.spec.ts › the page links a flyer PDF and advertises an OG image
+  8 passed (24.0s)
+```
+
+Files: `docs/flyer-sample.pdf`, preview `docs/screenshots/m4-flyer.png`, OG image `docs/screenshots/m4-og.png`
