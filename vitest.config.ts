@@ -9,6 +9,8 @@ export default defineConfig({
     include: ["tests/unit/**/*.test.{ts,tsx}"],
     environment: "node",
     setupFiles: ["tests/unit/setup.ts"],
+    globalSetup: ["tests/unit/global-setup.ts"],
+    fileParallelism: false,
     testTimeout: 30_000,
   },
 });

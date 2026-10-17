@@ -286,6 +286,11 @@ fieldset.field > legend {
 fieldset.field {
   border: 0;
   padding: 0;
+  min-inline-size: 0;
+}
+fieldset.field > legend {
+  padding: 0;
+  margin-bottom: 6px;
 }
 .field .hint {
   font-size: 0.9375rem;
@@ -321,7 +326,21 @@ fieldset.field {
 }
 .field input[type="file"] {
   font: inherit;
-  padding: 10px 0;
+  color: var(--muted);
+  padding: 4px 0;
+  max-width: 100%;
+}
+.field input[type="file"]::file-selector-button {
+  min-height: 48px;
+  margin-right: 12px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--ink);
+  font: 700 1rem/1 var(--sans);
+  cursor: pointer;
 }
 .field-error {
   color: var(--danger);

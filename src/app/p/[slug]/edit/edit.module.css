@@ -1,0 +1,43 @@
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.sightings {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.sightings > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--raised);
+  border-radius: var(--radius);
+  box-shadow: var(--lift);
+  overflow-wrap: anywhere;
+}
+
+.sightings > li.hidden {
+  opacity: 0.6;
+}
+
+.tag {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--sunk);
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.photoLink {
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 600;
+}

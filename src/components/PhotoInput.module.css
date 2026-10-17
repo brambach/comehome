@@ -1,0 +1,14 @@
+.thumbs {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 10px;
+}
+
+.thumbs img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: var(--r2);
+  box-shadow: var(--lift);
+}

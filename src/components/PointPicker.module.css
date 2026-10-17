@@ -1,0 +1,46 @@
+.frame {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--lift);
+  background: var(--sunk);
+}
+
+.map {
+  height: 300px;
+  width: 100%;
+  cursor: crosshair;
+}
+
+.fallback {
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  padding: 10px 12px;
+  border-radius: var(--r2);
+  background: var(--raised);
+  box-shadow: var(--lift);
+  font-size: 0.9375rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin-top: 4px;
+}
+
+.status {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+.pin {
+  width: 26px;
+  height: 26px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--pine);
+  border: 3px solid #fff;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.3);
+}

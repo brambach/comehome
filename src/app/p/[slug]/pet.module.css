@@ -1,0 +1,90 @@
+.layout {
+  display: grid;
+  gap: 24px;
+  padding-block: 12px 32px;
+}
+
+.photos {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.hero {
+  max-width: 520px;
+}
+
+.more {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 12px;
+}
+
+.more li {
+  width: 110px;
+}
+
+.more img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.info {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.name {
+  font-size: clamp(4rem, 21vw, 8rem);
+  overflow-wrap: anywhere;
+  margin-block: 2px 6px;
+}
+
+.lastSeen {
+  font-size: 1.125rem;
+}
+
+.cta {
+  display: grid;
+  gap: 8px;
+  margin-block: 12px 4px;
+}
+
+.cta p {
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+.description {
+  font-size: 1.125rem;
+  color: var(--ink-2);
+  white-space: pre-line;
+  max-width: var(--measure);
+}
+
+.section {
+  display: grid;
+  gap: 14px;
+  padding-block: 8px 24px;
+}
+
+.foot {
+  padding-block: 24px 48px;
+  font-size: 0.875rem;
+}
+
+@media (min-width: 860px) {
+  .layout {
+    grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
+    gap: 48px;
+    padding-top: 32px;
+  }
+  .cta {
+    max-width: 380px;
+  }
+  .cta p {
+    text-align: left;
+  }
+}
