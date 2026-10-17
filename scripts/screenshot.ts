@@ -18,7 +18,8 @@ async function main() {
   });
   await page.goto(url, { waitUntil: "load" });
   if (waitFor) await page.waitForSelector(waitFor, { timeout: 20_000 });
-  await page.waitForTimeout(1200); // let the statement move finish
+  // Let the statement move finish, and map tiles paint if there is a map.
+  await page.waitForTimeout(waitFor ? 5000 : 1200);
   await page.screenshot({ path: out, fullPage: true });
   await browser.close();
   console.log(`saved ${out}`);

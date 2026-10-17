@@ -114,10 +114,14 @@ export function SightingForm({
         <label htmlFor="s-note">
           Anything else? <span className="optional">(optional)</span>
         </label>
+        <p className="hint" id="d-note">
+          Shown on the page, so other searchers can use it.
+        </p>
         <textarea
           id="s-note"
           name="note"
           maxLength={500}
+          aria-describedby="d-note"
           placeholder="Heading toward the lake, limping a little…"
         />
       </div>

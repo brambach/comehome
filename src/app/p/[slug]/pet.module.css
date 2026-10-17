@@ -70,6 +70,23 @@
   padding-block: 8px 24px;
 }
 
+.sightings {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  border-top: 1px solid var(--line);
+}
+
+.sightings li {
+  padding-block: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.note {
+  color: var(--ink-2);
+  margin-top: 2px;
+}
+
 .foot {
   padding-block: 24px 48px;
   font-size: 0.875rem;

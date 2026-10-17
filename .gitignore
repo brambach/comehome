@@ -48,3 +48,6 @@ next-env.d.ts
 /test-results
 /playwright-report
 /blob-report
+
+# copied from node_modules on install
+/public/vendor

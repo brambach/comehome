@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PetMap } from "@/components/PetMap";
+import { corridor } from "@/lib/corridor";
 import { getPublicPet, getPublicSightings } from "@/lib/public";
 import { ago, formatDay, formatWhen } from "@/lib/time";
 import styles from "./pet.module.css";
@@ -36,6 +38,10 @@ export default async function PetPage(props: PageProps<"/p/[slug]">) {
   const [hero, ...rest] = pet.photos;
   const found = pet.status === "found";
   const latest = sightings.at(-1);
+  const trail = corridor(sightings, {
+    origin: { lat: pet.lastLat, lng: pet.lastLng, at: pet.lastSeenAt },
+  });
+  const recent = [...sightings].reverse().slice(0, 12);
 
   return (
     <>
@@ -104,7 +110,33 @@ export default async function PetPage(props: PageProps<"/p/[slug]">) {
 
       <section className={`wrap ${styles.section}`} aria-labelledby="where">
         <h2 id="where">{sightings.length ? "Where they've been seen" : "Where they were last seen"}</h2>
-        <div data-testid="map-slot" />
+        <PetMap
+          data={trail}
+          label={`Map of where ${pet.name} was last seen${sightings.length ? ` and ${sightings.length} sightings since` : ""}.`}
+        />
+        {recent.length ? (
+          <ol className={styles.sightings} data-testid="sighting-list">
+            {recent.map((s) => (
+              <li key={s.id}>
+                <p>
+                  <strong>{ago(s.seenAt)}</strong> <span className="muted num">{formatWhen(s.seenAt)}</span>
+                </p>
+                {s.note ? <p className={styles.note}>{s.note}</p> : null}
+              </li>
+            ))}
+            <li>
+              <p>
+                <strong>Last seen by owner</strong>{" "}
+                <span className="muted num">{formatWhen(pet.lastSeenAt)}</span>
+              </p>
+            </li>
+          </ol>
+        ) : (
+          <p className="muted">
+            No sightings yet. If you&apos;re nearby, look under decks, in garages and along creeks:
+            scared pets hide close and move at dawn and dusk.
+          </p>
+        )}
       </section>
 
       <footer className={`wrap ${styles.foot}`}>

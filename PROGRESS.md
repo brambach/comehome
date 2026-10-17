@@ -71,3 +71,29 @@ $ pnpm exec playwright test
 ```
 
 Screenshot: `docs/screenshots/m2-seen-mobile.png`
+
+## M3: map and corridor
+
+- `corridor(sightings, { origin })` in `src/lib/corridor.ts` is pure and returns a GeoJSON FeatureCollection: the owner's last-known point, visible sightings in time order with an `age` ramp (0 oldest, 1 newest), the path between them, and a hull (convex hull buffered 300 m; a buffered point or line when there are fewer than 3 points or they're collinear). Hidden reports are dropped. It is computed on the server and passed to the client map as data.
+- `PetMap` (MapLibre + OpenFreeMap `liberty`) draws hull, path, faded sighting dots and the origin ring, with cooperative gestures so phones can scroll past it. The same sightings are listed as text under the map for no-JS and screen readers.
+- Owner hides a report from `/p/[slug]/edit`; it leaves the public list, the count and the corridor.
+- Fixes found on the way: MapLibre v6 loads its web worker relative to its own module URL, which Turbopack doesn't copy. `scripts/copy-maplibre-worker.mjs` (postinstall) copies it to `public/vendor/`, and `setWorkerUrl` points at it. Turf had to be added to `serverExternalPackages` ("d is not a constructor" in the server bundle).
+- OpenFreeMap terms, checked at https://openfreemap.org: the public instance is free with no keys, registration or view limits; attribution is required, and MapLibre adds it from the style (visible bottom right in the screenshots).
+
+```
+$ pnpm test
+ ✓ tests/unit/corridor.test.ts (10 tests)
+   0 points · 1 point · 2 points · 8 points · out-of-order input · ISO strings · hidden reports
+   · origin starts the path · collinear points · input not mutated
+ Test Files  4 passed (4)
+      Tests  19 passed (19)
+
+$ pnpm seed
+Seeded Juniper with 8 sightings (+1 hidden).
+
+$ pnpm exec playwright test
+[3/7] hide.spec.ts › the owner hides a bad report and it leaves the public page
+  7 passed (17.3s)
+```
+
+Screenshots of the seeded pet with 8 sightings: `docs/screenshots/m3-corridor-mobile.png`, `docs/screenshots/m3-corridor-desktop.png`
