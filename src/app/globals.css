@@ -26,6 +26,7 @@
   --found: #2f5d3a;
   --danger: #8f3a1c;
 
+  --focus: color-mix(in srgb, var(--ink) 60%, transparent);
   --hover: color-mix(in srgb, var(--ink) 5%, transparent);
   --press: color-mix(in srgb, var(--ink) 8%, transparent);
   --lift: 0 0 0 1px rgb(20 30 24 / 0.05), 0 1px 2px rgb(20 30 24 / 0.05),
@@ -101,7 +102,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--pine);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
   border-radius: var(--r1);
 }
@@ -322,7 +323,7 @@ fieldset.field > legend {
 .field input:focus-visible,
 .field select:focus-visible,
 .field textarea:focus-visible {
-  outline: 2px solid var(--pine);
+  outline: 2px solid var(--focus);
   outline-offset: 1px;
 }
 .field input[type="file"] {
@@ -379,7 +380,7 @@ fieldset.field > legend {
   box-shadow: var(--btn-lit);
 }
 .choice input:focus-visible + span {
-  outline: 2px solid var(--pine);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
 }
 
@@ -417,8 +418,23 @@ fieldset.field > legend {
   color: #fff;
   padding: 18px 0;
 }
+.found-banner .wrap {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  align-items: center;
+}
+.found-banner svg {
+  grid-row: span 2;
+}
 .found-banner strong {
   font: 600 1.5rem/1.1 var(--display);
+}
+
+.glyph {
+  display: inline-block;
+  flex: none;
+  vertical-align: -0.15em;
 }
 
 /* A print: the photo sits on paper with a white border and a soft lift. */

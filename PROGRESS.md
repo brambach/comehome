@@ -181,3 +181,16 @@ public page JS, uncompressed: 472 KB before the map, 1513 KB once it loads
 **Stubbed or local-only:** storage is disk and email is console in dev. The Blob and Resend adapters are written, and Resend is unit-tested with a mocked client, but neither has run against the real services. `docs/flyer-sample.pdf` points its QR at the placeholder `comehome.example`. Nothing was deployed. No hosts were blocked. Wikimedia Commons returned one 429 while fetching the CC0 photos, and the retry worked.
 
 **Needed from Bryce:** a Postgres (Neon or Supabase) `DATABASE_URL`, a Vercel Blob store, a Resend key with a verified sender domain, the production `SITE_URL` and a `RATE_LIMIT_SALT`. Then run `pnpm db:migrate` once against prod (see README). Interview notes go in `docs/INTERVIEWS.md`.
+
+## Design-taste pass (17 Oct)
+
+Checked against `brambach/design-taste` (`APPLY.md`, `built/arro.md`). Fixes and the open font question are in `docs/DESIGN.md`; the four type options are in `docs/mockups/type-options.png`. CLAUDE.md now points at the taste repo.
+
+```
+$ pnpm lint && pnpm test && pnpm build   # exit 0
+      Tests  27 passed (27)
+$ pnpm exec playwright test
+  11 passed (31.1s)
+```
+
+Screenshot at Bryce's preview size: `docs/screenshots/taste-pass-1052.png` (1052x854, 2x)

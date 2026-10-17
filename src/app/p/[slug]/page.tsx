@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CheckGlyph } from "@/components/Glyph";
 import { PetMap } from "@/components/PetMap";
 import { corridor } from "@/lib/corridor";
 import { getPublicPet, getPublicSightings } from "@/lib/public";
@@ -48,6 +49,7 @@ export default async function PetPage(props: PageProps<"/p/[slug]">) {
       {found ? (
         <div className="found-banner" role="status" data-testid="found-banner">
           <div className="wrap">
+            <CheckGlyph />
             <strong>{pet.name} is home.</strong>
             <p>Found {pet.foundAt ? formatDay(pet.foundAt) : ""}. Thank you to everyone who looked.</p>
           </div>
@@ -124,12 +126,6 @@ export default async function PetPage(props: PageProps<"/p/[slug]">) {
                 {s.note ? <p className={styles.note}>{s.note}</p> : null}
               </li>
             ))}
-            <li>
-              <p>
-                <strong>Last seen by owner</strong>{" "}
-                <span className="muted num">{formatWhen(pet.lastSeenAt)}</span>
-              </p>
-            </li>
           </ol>
         ) : (
           <p className="muted">

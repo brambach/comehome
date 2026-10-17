@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CopyField } from "@/components/CopyField";
+import { HiddenGlyph } from "@/components/Glyph";
 import { editUrl } from "@/lib/notify";
 import { getOwnedPet, getOwnerSightings } from "@/lib/pets";
 import { petUrl } from "@/lib/site";
@@ -79,7 +80,7 @@ export default async function EditPage(props: PageProps<"/p/[slug]/edit">) {
                     <p>
                       <strong>{ago(s.seenAt)}</strong>{" "}
                       <span className="muted num">{formatWhen(s.seenAt)}</span>
-                      {s.hidden ? <span className={styles.tag}>Hidden</span> : null}
+                      {s.hidden ? <span className={styles.tag}><HiddenGlyph /> Hidden</span> : null}
                     </p>
                     {s.note ? <p>{s.note}</p> : null}
                     <p className="muted num">

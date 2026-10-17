@@ -54,7 +54,6 @@
 
 .cta p {
   font-size: 0.9375rem;
-  text-align: center;
 }
 
 .description {
@@ -74,12 +73,9 @@
   list-style: none;
   padding: 0;
   display: grid;
-  border-top: 1px solid var(--line);
-}
-
-.sightings li {
-  padding-block: 12px;
-  border-bottom: 1px solid var(--line);
+  gap: 18px;
+  margin-top: 10px;
+  max-width: var(--measure);
 }
 
 .note {
@@ -100,8 +96,5 @@
   }
   .cta {
     max-width: 380px;
-  }
-  .cta p {
-    text-align: left;
   }
 }
