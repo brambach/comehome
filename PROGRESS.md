@@ -145,3 +145,39 @@ $ pnpm exec playwright test
 ```
 
 Screenshots: `docs/screenshots/m5-found-mobile.png`, `docs/screenshots/m5-owner-mobile.png`
+
+## M6: seed, README, accessibility
+
+- `pnpm seed` makes "Juniper": lost near Donner Lake 28 hours ago, 8 sightings drifting into downtown Truckee, and 1 prank report in South Lake that the owner has hidden. It prints the public and edit links and replaces itself on re-run.
+- `README.md` covers local setup, every env var, Vercel deploy steps (Neon/Supabase, migrations, Blob, Resend), privacy, layout and credits.
+- Axe (`@axe-core/playwright`) on `/`, `/new`, the public page, the report page and the owner page: no serious or critical issues. The MapLibre canvas is excluded because the same data is listed as text.
+- Weight: MapLibre (~1 MB) now loads only when the map comes within 200px of the viewport. A test holds the first view under 550 KB of uncompressed JS (measured at 472 KB, which is the Next and React runtime plus our two small components).
+- Fixed on the way: `next/image` now allows Vercel Blob hosts. Without this, production photos would have failed. The e2e helper gives each simulated owner its own forwarded IP, because a full run makes more than 10 pages and correctly hit the per-IP limit.
+- The SessionStart hook runs `pnpm install` when `CLAUDE_CODE_REMOTE=true` (exit 0) and does nothing locally.
+
+```
+$ pnpm lint && pnpm test && pnpm build      # exit 0
+✓ Types generated successfully
+ Test Files  6 passed (6)
+      Tests  27 passed (27)
+✓ Compiled successfully
+┌ ○ /                         ├ ƒ /p/[slug]
+├ ƒ /api/pets                 ├ ƒ /p/[slug]/edit
+├ ƒ /api/pets/[slug]/sightings├ ƒ /p/[slug]/flyer.pdf
+├ ○ /new                      ├ ƒ /p/[slug]/opengraph-image
+                              ├ ƒ /p/[slug]/seen
+                              └ ƒ /uploads/[...key]
+
+$ pnpm exec playwright test
+axe serious/critical: {"/":[],"/new":[],"/p/pickles-zvmm":[],"/p/pickles-zvmm/seen":[],"/p/pickles-zvmm/edit":[]}
+public page JS, uncompressed: 472 KB before the map, 1513 KB once it loads
+  11 passed (27.3s)
+```
+
+## Summary
+
+**Built:** everything in the MVP list. That covers create, the public page with OG image, the sighting form with EXIF stripping, honeypot and rate limit, the corridor map with hide, the QR flyer, owner emails, mark found, the seed and the README. There are 27 unit tests and 11 e2e tests.
+
+**Stubbed or local-only:** storage is disk and email is console in dev. The Blob and Resend adapters are written, and Resend is unit-tested with a mocked client, but neither has run against the real services. `docs/flyer-sample.pdf` points its QR at the placeholder `comehome.example`. Nothing was deployed. No hosts were blocked. Wikimedia Commons returned one 429 while fetching the CC0 photos, and the retry worked.
+
+**Needed from Bryce:** a Postgres (Neon or Supabase) `DATABASE_URL`, a Vercel Blob store, a Resend key with a verified sender domain, the production `SITE_URL` and a `RATE_LIMIT_SALT`. Then run `pnpm db:migrate` once against prod (see README). Interview notes go in `docs/INTERVIEWS.md`.

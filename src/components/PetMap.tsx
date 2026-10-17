@@ -14,7 +14,25 @@ export function PetMap({ data, label }: { data: Corridor; label: string }) {
   const box = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "failed">("loading");
 
+  const [near, setNear] = useState(false);
+
+  // MapLibre is ~1 MB of JS. Fetch it only when the map is about to scroll into view,
+  // so the photo, name and button arrive first on a weak signal.
   useEffect(() => {
+    const el = box.current;
+    if (!el || near) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) setNear(true);
+      },
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [near]);
+
+  useEffect(() => {
+    if (!near) return;
     let cancelled = false;
     let remove: (() => void) | undefined;
     loadMapLibre()
@@ -89,7 +107,7 @@ export function PetMap({ data, label }: { data: Corridor; label: string }) {
       cancelled = true;
       remove?.();
     };
-  }, [data]);
+  }, [data, near]);
 
   return (
     <figure className={styles.frame}>

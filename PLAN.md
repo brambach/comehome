@@ -38,7 +38,6 @@ src/
     exif.ts                   stripExif
     storage/ mail/            adapters
     tokens.ts ratelimit.ts slug.ts validate.ts public.ts flyer.tsx
-  styles/
 drizzle/                      migrations
 scripts/seed.ts
 tests/unit/ tests/e2e/

@@ -17,3 +17,10 @@ Mapping:
 | Found | `--found` | #2f5d3a |
 
 The statement move on each page is the pet's name (or the home headline) rising into place. Everything else is a 200ms fade or nothing.
+
+## Patterns studied (no code copied)
+
+- **rubyforgood/homeward-tails** (MIT): people and their contact details live apart from the public `Pet` record; public listings go through named scopes (`published`, `unadopted`); visitors reach staff through a contact form that emails them rather than seeing an address. comehome mirrors this: owner email and reporter contact sit in private columns, public pages read only through `src/lib/public.ts`, and contact reaches the owner by email.
+- **Turf** (MIT): `convex` then `buffer` for the hull, falling back to a buffered line or point when `convex` returns null (fewer than 3 points, or collinear).
+- **MapLibre GL JS** (BSD-3-Clause): GeoJSON source with data-driven `circle-opacity` for fading old sightings; `cooperativeGestures` so phones can scroll past the map.
+- **react-pdf and node-qrcode** (MIT): `renderToBuffer` on the server; the QR code as a PNG data URL in an `<Image>`.

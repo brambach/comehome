@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Native or Node-only packages stay out of the server bundle.
   serverExternalPackages: ["sharp", "@react-pdf/renderer", "postgres", "@turf/buffer", "@turf/convex", "@turf/helpers"],
+  // Production photos live on Vercel Blob.
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
+  },
   // Fonts read at runtime by the OG image and the flyer.
   outputFileTracingIncludes: {
     "/p/[slug]/opengraph-image": ["./assets/fonts/**"],
