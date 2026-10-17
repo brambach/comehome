@@ -26,6 +26,7 @@ export default defineConfig({
     command: `pnpm exec next start -p ${port}`,
     port,
     reuseExistingServer: true,
-    env: { SITE_URL: `http://localhost:${port}` },
+    // A fresh salt per run gives the test client a new rate-limit identity.
+    env: { SITE_URL: `http://localhost:${port}`, RATE_LIMIT_SALT: `e2e-${Date.now()}` },
   },
 });

@@ -45,3 +45,29 @@ $ pnpm exec playwright test
 ```
 
 Screenshots: `docs/screenshots/m1-pet-mobile.png`, `docs/screenshots/m1-pet-desktop.png`, `docs/screenshots/m1-new-mobile.png`
+
+## M2: sightings and upload
+
+- `/p/[slug]/seen` is the report page; the public page's "I saw this pet" is a plain link to it, so the share page carries no form JS.
+- Required inputs: the location (tap the map or "Use my location") and the time, which is prefilled with now. That makes 2 required; photo, note and contact are optional. The e2e reporter does exactly one thing (share location) and taps send.
+- `POST /api/pets/[slug]/sightings`: honeypot (silently accepted, nothing saved), Postgres fixed-window rate limit (6 per pet per IP per 10 min, 30 per IP per hour), service-area check, zod validation.
+- Photos are shrunk in the browser (for one bar of signal and serverless body limits), then always re-encoded server-side by `stripExif`.
+
+```
+$ pnpm test
+ ✓ tests/unit/exif.test.ts (3 tests)
+   - removes GPS and all other EXIF   # fixture has GPS 39.3267N; after stripExif exifr.gps() is undefined, no EXIF/ICC/XMP
+   - keeps the image upright when it drops the orientation tag
+   - downsizes large photos and rejects non-images
+ Test Files  3 passed (3)
+      Tests  9 passed (9)
+
+$ pnpm exec playwright test
+[3/6] sighting.spec.ts › a stranger reports a sighting with at most 4 required inputs
+[4/6] sighting.spec.ts › optional photo, note and contact reach the owner but not the public
+[5/6] sighting.spec.ts › honeypot submissions are dropped and floods are rate limited
+[6/6] sighting.spec.ts › reports outside the Tahoe area are refused
+  6 passed (13.7s)
+```
+
+Screenshot: `docs/screenshots/m2-seen-mobile.png`
