@@ -1,0 +1,471 @@
+/*
+ * comehome tokens. Material borrowed from Dervo (pine primary, rust spent once,
+ * hairline edges, layered lift) on the portfolio's forest-and-cream palette.
+ * The pet's photo owns the color; the interface stays warm, neutral, light.
+ * Motion: one statement move per viewport (900ms), utility 200ms ease-out,
+ * exits 140ms ease-in. Transform and opacity only.
+ */
+:root {
+  --cream: #f4efe4;
+  --paper: #fbf8f2;
+  --raised: #fffdf9;
+  --sunk: #ece5d7;
+  --line: #e3dbcb;
+  --line-strong: #d3c8b3;
+  --ink: #1d1c18;
+  --ink-2: #3d3a33;
+  --muted: #5d584e;
+  --faint: #6a645a;
+
+  --pine: #22382b;
+  --pine-ink: #f8f8f5;
+  --sage-wash: #e8ecdf;
+  --signal: #b0461f;
+  --signal-ink: #ffffff;
+  --signal-wash: #f6e6dd;
+  --found: #2f5d3a;
+  --danger: #8f3a1c;
+
+  --hover: color-mix(in srgb, var(--ink) 5%, transparent);
+  --press: color-mix(in srgb, var(--ink) 8%, transparent);
+  --lift: 0 0 0 1px rgb(20 30 24 / 0.05), 0 1px 2px rgb(20 30 24 / 0.05),
+    0 4px 10px -4px rgb(20 30 24 / 0.08), 0 18px 36px -18px rgb(34 56 43 / 0.22);
+  --btn-lit: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -1px 0 rgb(0 0 0 / 0.18),
+    0 1px 2px rgb(20 30 24 / 0.18);
+
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --ease-statement: cubic-bezier(0.19, 1, 0.22, 1);
+  --dur-statement: 900ms;
+  --dur-utility: 200ms;
+  --dur-exit: 140ms;
+  --dur-press: 80ms;
+
+  --r1: 6px;
+  --r2: 10px;
+  --radius: 14px;
+  --tap: 52px;
+  --gutter: 16px;
+  --measure: 34rem;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100dvh;
+  background: var(--cream);
+  color: var(--ink);
+  font: 400 1.0625rem/1.55 var(--sans);
+  letter-spacing: 0.002em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 3px;
+  border-radius: var(--r1);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -120px;
+  z-index: 50;
+  padding: 10px 14px;
+  border-radius: var(--r2);
+  background: var(--raised);
+  box-shadow: var(--lift);
+  font-weight: 700;
+  text-decoration: none;
+}
+.skip:focus {
+  top: 12px;
+}
+
+/* ---------- layout ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.narrow {
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+}
+
+.site-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.wordmark {
+  font: 600 1.375rem/1 var(--display);
+  letter-spacing: -0.015em;
+  text-decoration: none;
+}
+
+.stack > * + * {
+  margin-top: var(--space, 16px);
+}
+
+/* ---------- type ---------- */
+
+.display {
+  font-family: var(--display);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+
+.lede {
+  font-size: 1.1875rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+  max-width: var(--measure);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: 1.375rem;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- buttons: pills, pine for primary, rust spent once ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--tap);
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--pine);
+  color: var(--pine-ink);
+  box-shadow: var(--btn-lit);
+  font: 700 1.0625rem/1 var(--sans);
+  letter-spacing: -0.004em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform var(--dur-utility) ease-out,
+    opacity var(--dur-utility) ease-out;
+}
+.btn:active {
+  transform: scale(0.97);
+  transition-duration: var(--dur-press);
+}
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+}
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+  transform: none;
+}
+.btn-quiet {
+  background: var(--raised);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+.btn-block {
+  width: 100%;
+}
+
+/* The one accent. Only "I saw this pet" uses it. */
+.btn-signal {
+  background: var(--signal);
+  color: var(--signal-ink);
+  min-height: 60px;
+  font-size: 1.1875rem;
+}
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+/* ---------- fields ---------- */
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+.field > label,
+.field > .label,
+fieldset.field > legend {
+  font-weight: 700;
+}
+fieldset.field {
+  border: 0;
+  padding: 0;
+}
+.field .hint {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+}
+.input,
+.field input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 12px 14px;
+  border: 0;
+  border-radius: var(--r2);
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  color: var(--ink);
+  font: inherit;
+}
+.field textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 1px;
+}
+.field input[type="file"] {
+  font: inherit;
+  padding: 10px 0;
+}
+.field-error {
+  color: var(--danger);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.choices {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.choice {
+  position: relative;
+}
+.choice input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+}
+.choice span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: var(--raised);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+  font-weight: 600;
+}
+.choice input:checked + span {
+  background: var(--pine);
+  color: var(--pine-ink);
+  box-shadow: var(--btn-lit);
+}
+.choice input:focus-visible + span {
+  outline: 2px solid var(--pine);
+  outline-offset: 3px;
+}
+
+/* Honeypot: off-screen, not display:none, so naive bots fill it. */
+.hp {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ---------- surfaces ---------- */
+
+.card {
+  background: var(--raised);
+  border-radius: var(--radius);
+  box-shadow: var(--lift);
+  padding: 20px;
+}
+
+.notice {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  background: var(--sage-wash);
+  color: var(--ink-2);
+}
+.notice-error {
+  background: var(--signal-wash);
+  color: var(--danger);
+}
+
+.found-banner {
+  background: var(--found);
+  color: #fff;
+  padding: 18px 0;
+}
+.found-banner strong {
+  font: 600 1.5rem/1.1 var(--display);
+}
+
+/* A print: the photo sits on paper with a white border and a soft lift. */
+.print {
+  background: #fff;
+  padding: 8px 8px 10px;
+  border-radius: 3px;
+  box-shadow: var(--lift);
+}
+.print img {
+  width: 100%;
+  height: auto;
+  border-radius: 1px;
+}
+
+/* ---------- motion ---------- */
+
+/* Statement: one per viewport, plays once. */
+.enter-statement {
+  animation: statement var(--dur-statement) var(--ease-statement) both;
+}
+@keyframes statement {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.enter-utility {
+  animation: utility var(--dur-utility) ease-out both;
+}
+@keyframes utility {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.exit {
+  animation: exit var(--dur-exit) ease-in both;
+}
+@keyframes exit {
+  to {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}
