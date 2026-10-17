@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { ImageError } from "@/lib/exif";
 import { badRequest, tooMany } from "@/lib/http";
 import { notifyPetCreated } from "@/lib/notify";
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const { pet, token } = await createPet(parsed.data, photos);
-    await notifyPetCreated(pet, token).catch((err) => console.error("notifyPetCreated", err));
+    after(() => notifyPetCreated(pet, token).catch((err) => console.error("notifyPetCreated", err)));
     return NextResponse.json({ ok: true, slug: pet.slug, token });
   } catch (err) {
     if (err instanceof ImageError) return badRequest({ photos: err.message });

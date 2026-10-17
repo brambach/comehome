@@ -24,7 +24,7 @@ export function PetMap({ data, label }: { data: Corridor; label: string }) {
           container: box.current,
           style: STYLE_URL,
           bounds: data.bbox,
-          fitBoundsOptions: { padding: 36, maxZoom: 15 },
+          fitBoundsOptions: { padding: 36, maxZoom: 14 },
           attributionControl: { compact: true },
           cooperativeGestures: true,
         });

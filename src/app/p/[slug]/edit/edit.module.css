@@ -23,6 +23,10 @@
   overflow-wrap: anywhere;
 }
 
+.sightings > li > form {
+  flex: none;
+}
+
 .sightings > li.hidden {
   opacity: 0.6;
 }

@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { after, NextResponse, type NextRequest } from "next/server";
 import { ImageError } from "@/lib/exif";
 import { badRequest, tooMany } from "@/lib/http";
 import { notifySighting } from "@/lib/notify";
@@ -33,7 +33,8 @@ export async function POST(req: NextRequest, ctx: RouteContext<"/api/pets/[slug]
   const [photo] = formFiles(form, "photo");
   try {
     const sighting = await createSighting(pet, parsed.data, photo ?? null, ipHash);
-    await notifySighting(pet.id, sighting).catch((err) => console.error("notifySighting", err));
+    // Reply first: the reporter may be on one bar. The owner email goes out after.
+    after(() => notifySighting(pet.id, sighting).catch((err) => console.error("notifySighting", err)));
     return NextResponse.json({ ok: true, id: sighting.id });
   } catch (err) {
     if (err instanceof ImageError) return badRequest({ photo: err.message });

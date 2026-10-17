@@ -120,3 +120,28 @@ $ pnpm exec playwright test
 ```
 
 Files: `docs/flyer-sample.pdf`, preview `docs/screenshots/m4-flyer.png`, OG image `docs/screenshots/m4-og.png`
+
+## M5: owner email, mark found
+
+- Each sighting emails the owner through the `Mailer` adapter (console in dev, Resend in prod) with the time in Tahoe time, the coordinates plus an OpenStreetMap link, the note, the reporter's contact (private to the owner) or a line saying there's none, a photo link, and the page link. User text is HTML-escaped. It's sent with `after()`, so the reporter's response doesn't wait on email.
+- The create flow also emails the owner their private edit link.
+- Mark found on the owner page: the public page shows a green "is home" banner, "I saw this pet" disappears, `/seen` says the form is closed, and the API refuses new sightings with a 400. "Reopen the search" reverses it.
+- Also fixed: the owner page's Hide/Show buttons were squeezed to one letter per line on phones, and single-point maps now stop at zoom 14 so you can see the neighbourhood.
+
+```
+$ pnpm test
+ ✓ tests/unit/mail.test.ts (5 tests)
+   - goes to the owner with the time, place, note, private contact and page link
+       to: juniper-owner@example.com · subject: "New sighting: Juniper" · contact, OSM link, page URL in body · <b> escaped in HTML
+   - says so when the reporter left no contact
+   - carries the share link and the private edit link
+   - resend adapter sends the same message through Resend with the configured sender
+   - throws when Resend rejects the message
+      Tests  27 passed (27)
+
+$ pnpm exec playwright test
+[3/9] found.spec.ts › marking found shows the banner and closes the form
+  9 passed (27.0s)
+```
+
+Screenshots: `docs/screenshots/m5-found-mobile.png`, `docs/screenshots/m5-owner-mobile.png`
