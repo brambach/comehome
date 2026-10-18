@@ -19,7 +19,7 @@ Lost-pet recovery pages for Tahoe and Truckee. Next.js 16 (App Router), Drizzle 
 - Public pages stay light: no client JS beyond the map and the sighting form.
 - Don't build anything on the "Pending interviews" list in `docs/INTERVIEWS.md`.
 - Storage and email go through the adapters in `src/lib/storage` and `src/lib/mail`; never call Blob or Resend directly.
-- Design: before building or reviewing UI, read `APPLY.md` and `built/arro.md` in `github.com/brambach/design-taste` (private; clone it from a cloud session). This project's tokens in `src/app/globals.css` win where they exist.
-- Motion: transform and opacity only, never `transition: all`; honor reduced motion. Tokens live in `src/app/globals.css`.
+- Design: before building or reviewing UI, read `APPLY.md` and `built/arro.md` in `github.com/brambach/design-taste` (private; clone it from a cloud session). Its tokens are vendored in `vendor/design-tokens`; override them in `src/app/globals.css`, never in the vendored copy (`pnpm build` checks).
+- Motion: transform and opacity only, never `transition: all`; honor reduced motion. Use the shared `--dur-*` and `--ease-*` tokens.
 - The signal color (`.btn-signal`) is spent once: on "I saw this pet."
 - After each milestone, record evidence in `PROGRESS.md` and push.

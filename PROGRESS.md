@@ -194,3 +194,26 @@ $ pnpm exec playwright test
 ```
 
 Screenshot at Bryce's preview size: `docs/screenshots/taste-pass-1052.png` (1052x854, 2x)
+
+## Shared design tokens and type (18 Oct)
+
+comehome now uses `@brambach/design-tokens` from design-taste commit `e8404234`, vendored in `vendor/design-tokens` with the `tokens.css` and `themes/warm-paper.css` layers. The ~33 hand-copied variables in `globals.css` are down to four project values. Type is option C: Instrument Serif at one weight, Instrument Sans, and JetBrains Mono as the mono token. The OG image and flyer use the same faces. Fraunces, Hanken Grotesk and their @fontsource packages are removed. Details and the name mapping are in `docs/DESIGN.md`.
+
+- `pnpm build` runs `sync.sh --check` first. Appending a byte to `tokens.css`, or adding a file to the folder, fails the build (checked both).
+- The flyer's "LOST DOG" letter-spacing went from 4 to 1.5pt. At 4pt with Instrument Sans, `pdftotext` read it as "LO S T D O G", and the flyer test caught it.
+- First-view JS is unchanged at 472 KB. The map reads `--primary` from computed style instead of importing `tokens.json`.
+
+```
+$ pnpm lint && pnpm test                    # exit 0
+✓ Types generated successfully
+ Test Files  6 passed (6)
+      Tests  27 passed (27)
+$ pnpm e2e                                  # build + playwright, exit 0
+design-tokens: vendor/design-tokens matches e8404234a6e8570c4c79002aca256b1483e3e95e (e8404234a6e8)
+✓ Compiled successfully
+axe serious/critical: {"/":[],"/new":[],"/p/pickles-svrq":[],"/p/pickles-svrq/seen":[],"/p/pickles-svrq/edit":[]}
+public page JS, uncompressed: 472 KB before the map, 1513 KB once it loads
+  11 passed (19.6s)
+```
+
+Screenshots at 390px, 2x: `docs/screenshots/tokens-home-mobile.png`, `docs/screenshots/tokens-pet-mobile.png`
