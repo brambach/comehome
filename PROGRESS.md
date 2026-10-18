@@ -217,3 +217,25 @@ public page JS, uncompressed: 472 KB before the map, 1513 KB once it loads
 ```
 
 Screenshots at 390px, 2x: `docs/screenshots/tokens-home-mobile.png`, `docs/screenshots/tokens-pet-mobile.png`
+
+## Incline Village first, and Boots (18 Oct)
+
+- **Incline Village leads.** The site title, description and home eyebrow lead with Incline Village. The home page says where comehome starts (Incline Village, Crystal Bay, Kings Beach, Tahoe Vista). The create map opens on Incline (OpenStreetMap place node 39.2548, -119.9538; Wikipedia gives 39.2458, -119.95) at zoom 11, which frames Crystal Bay to Tahoe Vista.
+- **Per-pet labels follow the pet.** The pet page eyebrow, meta description, OG image, flyer and the owner's share hint say "Incline Village & North Shore" when the last-seen point is on the north shore (`areaName` in `src/lib/geo.ts`) and "Tahoe & Truckee" otherwise. `SERVICE_BOUNDS` is unchanged, so existing pets and the Donner Lake tests still work.
+- **Why I built this.** A short home section about Boots, written only from the facts Bryce gave. The photo went through `stripExif` (1200x1600, 145 KB, no metadata). It's served with a `getImageProps` srcset as a plain `<img>`, so it adds no client JS; phones get a 27 KB WebP. `tests/unit/geo.test.ts` keeps metadata out of the committed file, and `tests/e2e/home.spec.ts` covers the copy, alt text, srcset and served size.
+
+```
+$ pnpm lint                                 # exit 0
+✓ Types generated successfully
+$ pnpm test                                 # exit 0
+ Test Files  7 passed (7)
+      Tests  30 passed (30)
+$ pnpm e2e                                  # build + playwright, exit 0
+design-tokens: vendor/design-tokens matches e8404234a6e8570c4c79002aca256b1483e3e95e (e8404234a6e8)
+✓ Compiled successfully
+axe serious/critical: {"/":[],"/new":[],"/p/pickles-fk6s":[],"/p/pickles-fk6s/seen":[],"/p/pickles-fk6s/edit":[]}
+public page JS, uncompressed: 472 KB before the map, 1513 KB once it loads
+  13 passed (22.8s)
+```
+
+Screenshots: `docs/screenshots/incline-home-mobile.png` (390px, 2x), `docs/screenshots/incline-home-desktop.png` (1280px, 2x)
