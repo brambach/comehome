@@ -38,11 +38,11 @@ const RULE = "#d3c8b3";
 const s = StyleSheet.create({
   page: { padding: 36, backgroundColor: "#ffffff", color: INK, fontFamily: "Instrument Sans" },
   top: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 },
-  eyebrow: { fontSize: 24, fontWeight: 600, letterSpacing: 4 },
+  eyebrow: { fontSize: 24, fontWeight: 600, letterSpacing: 1.5 },
   where: { fontSize: 13, color: MUTED },
   photo: { width: 540, height: 276, objectFit: "cover", borderRadius: 4 },
   name: { fontFamily: "Instrument Serif", marginTop: 10, lineHeight: 1.18, letterSpacing: -1 },
-  seen: { fontSize: 15, marginTop: 4 },
+  seen: { fontSize: 15, marginTop: 8 },
   desc: { fontSize: 12.5, lineHeight: 1.4, color: MUTED, marginTop: 8 },
   bottom: {
     marginTop: "auto",
