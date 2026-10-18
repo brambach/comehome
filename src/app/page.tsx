@@ -1,11 +1,22 @@
+import { getImageProps } from "next/image";
 import Link from "next/link";
+import boots from "../../assets/images/boots.jpg";
 import styles from "./home.module.css";
 
+const BOOTS_ALT = "Boots, a black-and-white tuxedo cat, asleep and curled up on a cream blanket.";
+
 export default function Home() {
+  // getImageProps, not <Image>: a plain <img> keeps the home page free of client JS.
+  const { props: bootsImg } = getImageProps({
+    src: boots,
+    alt: BOOTS_ALT,
+    sizes: "(min-width: 760px) 280px, 220px",
+  });
+
   return (
     <div className="wrap">
       <section className={styles.hero}>
-        <p className="eyebrow">Lake Tahoe · Truckee</p>
+        <p className="eyebrow">Incline Village · Lake Tahoe</p>
         <h1 className={`display enter-statement ${styles.title}`}>
           Bring them
           <br />
@@ -48,9 +59,33 @@ export default function Home() {
         </li>
       </ol>
 
-      <p className={`muted ${styles.foot}`}>
-        No accounts. Your email stays private and is used only to tell you about sightings.
-      </p>
+      <section className={styles.why} aria-labelledby="why">
+        <figure className={`print ${styles.whyPhoto}`}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- optimized srcset from getImageProps */}
+          <img {...bootsImg} alt={BOOTS_ALT} />
+        </figure>
+        <div className={styles.whyText}>
+          <h2 id="why">Why I built this</h2>
+          <p>
+            Boots is my family&apos;s cat, a black-and-white tuxedo. She went missing in Incline Village
+            for about 50 days.
+          </p>
+          <p>
+            My parents put up flyers and went through neighborhoods knocking on doors. That&apos;s why I
+            built comehome: so the next family has one link to share, and every sighting lands on one
+            map.
+          </p>
+          <p className="muted">Bryce</p>
+        </div>
+      </section>
+
+      <div className={`muted ${styles.foot}`}>
+        <p>
+          Starting in Incline Village, Crystal Bay, Kings Beach and Tahoe Vista. Pages work anywhere
+          around Lake Tahoe and Truckee.
+        </p>
+        <p>No accounts. Your email stays private and is used only to tell you about sightings.</p>
+      </div>
     </div>
   );
 }

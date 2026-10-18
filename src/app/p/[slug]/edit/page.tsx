@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CopyField } from "@/components/CopyField";
 import { HiddenGlyph } from "@/components/Glyph";
+import { areaName } from "@/lib/geo";
 import { editUrl } from "@/lib/notify";
 import { getOwnedPet, getOwnerSightings } from "@/lib/pets";
 import { petUrl } from "@/lib/site";
@@ -61,7 +62,7 @@ export default async function EditPage(props: PageProps<"/p/[slug]/edit">) {
             </a>
           </div>
           <p className="hint muted">
-            Post the link to Tahoe and Truckee Facebook groups and Nextdoor. The preview shows {pet.name}
+            Post the link to {areaName(pet.lastLat, pet.lastLng).prose} Facebook groups and Nextdoor. The preview shows {pet.name}
             &apos;s photo.
           </p>
         </section>

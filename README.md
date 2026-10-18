@@ -1,6 +1,6 @@
 # comehome
 
-When a pet goes missing around Lake Tahoe and Truckee, the owner makes one shareable page in about five minutes: the last-known point, a photo, public sightings drawn as a movement corridor instead of one pin, and a QR flyer to print. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account.
+When a pet goes missing around Lake Tahoe, starting with Incline Village and the North Shore (Crystal Bay, Kings Beach, Tahoe Vista) and covering the rest of Tahoe and Truckee, the owner makes one shareable page in about five minutes: the last-known point, a photo, public sightings drawn as a movement corridor instead of one pin, and a QR flyer to print. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account.
 
 ![Juniper's page with 8 sightings](docs/screenshots/m3-corridor-mobile.png)
 
@@ -17,7 +17,7 @@ Out of scope for now: neighbor alerts (parked in [`docs/INTERVIEWS.md`](docs/INT
 
 ## Stack
 
-Next.js 16 (App Router, TypeScript, pnpm) · Postgres via Drizzle (postgres-js) · MapLibre GL with OpenFreeMap tiles · Turf for the corridor · @react-pdf/renderer and qrcode for the flyer · sharp for EXIF stripping · Vercel Blob and Resend behind adapters · Vitest and Playwright · Fraunces and Hanken Grotesk via @fontsource.
+Next.js 16 (App Router, TypeScript, pnpm) · Postgres via Drizzle (postgres-js) · MapLibre GL with OpenFreeMap tiles · Turf for the corridor · @react-pdf/renderer and qrcode for the flyer · sharp for EXIF stripping · Vercel Blob and Resend behind adapters · Vitest and Playwright · Instrument Serif and Instrument Sans via @fontsource · Bryce's shared design tokens, vendored in `vendor/design-tokens`.
 
 ## Run it locally
 
@@ -107,6 +107,6 @@ docs/               DESIGN.md, INTERVIEWS.md, screenshots/, flyer-sample.pdf
 ## Credits
 
 - Map tiles: [OpenFreeMap](https://openfreemap.org) (free, no key; attribution shown on the map) · © OpenMapTiles · data © OpenStreetMap contributors.
-- Fonts: Fraunces and Hanken Grotesk, SIL Open Font License (`assets/fonts/`).
+- Fonts: Instrument Serif, Instrument Sans and JetBrains Mono, SIL Open Font License, via @fontsource. Copies of the first two for the OG image and flyer are in `assets/fonts/`.
 - Test and demo photos: CC0 from Wikimedia Commons (`tests/fixtures/README.md`).
 - Studied for patterns, no code copied: Turf (MIT), MapLibre GL JS (BSD-3-Clause), react-pdf (MIT), node-qrcode (MIT), rubyforgood/homeward-tails (MIT). Notes in `docs/DESIGN.md`.

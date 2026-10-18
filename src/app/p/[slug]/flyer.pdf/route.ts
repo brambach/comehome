@@ -1,4 +1,5 @@
 import { renderFlyer } from "@/lib/flyer";
+import { areaName } from "@/lib/geo";
 import { imageBytes } from "@/lib/images";
 import { getPublicPet } from "@/lib/public";
 import { petUrl, shortPetUrl } from "@/lib/site";
@@ -19,6 +20,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/p/[slug]/flyer.pdf"
     status: pet.status,
     url: petUrl(pet.slug),
     shortUrl: shortPetUrl(pet.slug),
+    area: areaName(pet.lastLat, pet.lastLng).label,
     photo,
   });
   return new Response(new Uint8Array(pdf), {

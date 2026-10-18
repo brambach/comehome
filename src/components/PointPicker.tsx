@@ -3,7 +3,7 @@
 import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MlMap, Marker } from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
-import { SERVICE_BOUNDS, TAHOE_CENTER } from "@/lib/geo";
+import { DEFAULT_ZOOM, INCLINE_VILLAGE, SERVICE_BOUNDS } from "@/lib/geo";
 import { loadMapLibre, STYLE_URL } from "./maplibre";
 import styles from "./PointPicker.module.css";
 
@@ -44,8 +44,8 @@ export function PointPicker({
         const m = new maplibregl.Map({
           container: box.current,
           style: STYLE_URL,
-          center: hasCenter ? [centerLng!, centerLat!] : TAHOE_CENTER,
-          zoom: hasCenter ? 13 : 9.5,
+          center: hasCenter ? [centerLng!, centerLat!] : INCLINE_VILLAGE,
+          zoom: hasCenter ? 13 : DEFAULT_ZOOM,
           maxBounds: [
             [SERVICE_BOUNDS.west - 0.3, SERVICE_BOUNDS.south - 0.3],
             [SERVICE_BOUNDS.east + 0.3, SERVICE_BOUNDS.north + 0.3],

@@ -15,7 +15,7 @@ One shareable page per lost pet around Tahoe and Truckee: last-known point, phot
 - **Map.** MapLibre GL + OpenFreeMap `liberty` style, loaded only on pages that need it.
 - **Flyer.** `@react-pdf/renderer`, letter size, QR code from `qrcode` as a PNG data URL. Served from `/p/[slug]/flyer.pdf`.
 - **OG image.** `opengraph-image.tsx` per pet via `next/og`, using the first photo.
-- **Fonts.** `@fontsource/fraunces` (display) and `@fontsource/hanken-grotesk` (UI); the .woff files are reused for the OG image and the PDF.
+- **Fonts.** `@fontsource/instrument-serif` (display) and `@fontsource/instrument-sans` (UI), per the shared tokens (Fraunces and Hanken Grotesk until 18 Oct, see `docs/DESIGN.md`); the .woff files are reused for the OG image and the PDF.
 
 ## File layout
 

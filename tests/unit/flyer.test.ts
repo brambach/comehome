@@ -36,6 +36,7 @@ describe("flyer", () => {
       status: "lost",
       url: petUrl(slug),
       shortUrl: shortPetUrl(slug),
+      area: "Incline Village & North Shore",
       photo: await fixture("dog-grass.jpg"),
     });
 
@@ -49,6 +50,7 @@ describe("flyer", () => {
     const text = pdfText(pdf);
     expect(text).toContain("LOST DOG");
     expect(text).toContain("Juniper");
+    expect(text).toContain("Incline Village & North Shore");
     expect(text).toContain("comehome.test/p/juniper-k7q2");
   });
 
@@ -61,6 +63,7 @@ describe("flyer", () => {
       status: "lost",
       url: petUrl("sir-reginald-abcd"),
       shortUrl: shortPetUrl("sir-reginald-abcd"),
+      area: "Tahoe & Truckee",
       photo: await fixture("dog-window.jpg"),
     });
     expect(execFileSync("pdfinfo", ["-"], { input: pdf }).toString()).toMatch(/Pages:\s+1/);
