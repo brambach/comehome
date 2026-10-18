@@ -33,7 +33,28 @@
   color: var(--muted);
 }
 
+.why {
+  display: grid;
+  gap: var(--s5);
+  margin-top: var(--s7);
+  padding-top: var(--s6);
+  border-top: 1px solid var(--line-strong);
+}
+
+.whyPhoto {
+  width: 220px;
+}
+
+.whyText {
+  display: grid;
+  gap: var(--s3);
+  align-content: start;
+  max-width: var(--measure);
+}
+
 .foot {
+  display: grid;
+  gap: var(--s2);
   padding-block: 32px 48px;
   font-size: 0.9375rem;
 }
@@ -44,6 +65,14 @@
   }
   .steps {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .why {
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: var(--s6);
+    align-items: center;
+  }
+  .whyPhoto {
+    width: 280px;
   }
   .hero :global(.btn-block) {
     width: auto;
