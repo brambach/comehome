@@ -18,7 +18,7 @@
   gap: 12px;
   padding: 14px 16px;
   background: var(--raised);
-  border-radius: var(--radius);
+  border-radius: var(--r3);
   box-shadow: var(--lift);
   overflow-wrap: anywhere;
 }
@@ -37,10 +37,10 @@
   gap: 4px;
   margin-left: 8px;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--sunk);
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .photoLink {

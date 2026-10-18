@@ -6,9 +6,6 @@ import type { Corridor } from "@/lib/corridor";
 import { loadMapLibre, STYLE_URL } from "./maplibre";
 import styles from "./PetMap.module.css";
 
-// Pine, from the design tokens. Maps can't read CSS variables.
-const PINE = "#22382b";
-
 /** The public corridor map. The page renders the same data as text, so this is an enhancement. */
 export function PetMap({ data, label }: { data: Corridor; label: string }) {
   const box = useRef<HTMLDivElement>(null);
@@ -38,6 +35,8 @@ export function PetMap({ data, label }: { data: Corridor; label: string }) {
     loadMapLibre()
       .then((maplibregl) => {
         if (cancelled || !box.current || !data.bbox) return;
+        // MapLibre paint can't take var(); resolve the token once.
+        const PINE = getComputedStyle(box.current).getPropertyValue("--primary").trim();
         const map = new maplibregl.Map({
           container: box.current,
           style: STYLE_URL,

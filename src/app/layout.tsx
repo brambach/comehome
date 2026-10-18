@@ -1,9 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import Link from "next/link";
-import "@fontsource/fraunces/latin-600.css";
-import "@fontsource/hanken-grotesk/latin-400.css";
-import "@fontsource/hanken-grotesk/latin-700.css";
+import "@fontsource/instrument-serif/latin-400.css";
+import "@fontsource/instrument-sans/latin-400.css";
+import "@fontsource/instrument-sans/latin-600.css";
+import "@fontsource/jetbrains-mono/latin-400.css";
+import "@brambach/design-tokens/tokens.css";
+import "@brambach/design-tokens/themes/warm-paper.css";
 import "./globals.css";
+import { palette } from "@/lib/palette";
 import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -14,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5efe3",
+  themeColor: palette.paper,
   width: "device-width",
   initialScale: 1,
 };

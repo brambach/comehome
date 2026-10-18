@@ -1,56 +1,21 @@
 /*
- * comehome tokens. Material borrowed from Dervo (pine primary, rust spent once,
- * hairline edges, layered lift) on the portfolio's forest-and-cream palette.
+ * Tokens come from @brambach/design-tokens (vendor/design-tokens), loaded in
+ * layout.tsx: tokens.css, then themes/warm-paper.css. No accent layer: the base
+ * pine --primary and rust --accent are comehome's, and accents/clay.css would
+ * make every primary button the one accent. Don't edit the vendored copy;
+ * override here.
+ *
  * The pet's photo owns the color; the interface stays warm, neutral, light.
- * Motion: one statement move per viewport (900ms), utility 200ms ease-out,
- * exits 140ms ease-in. Transform and opacity only.
+ * --accent is spent once, on "I saw this pet".
  */
 :root {
-  --cream: #f4efe4;
-  --paper: #fbf8f2;
-  --raised: #fffdf9;
-  --sunk: #ece5d7;
-  --line: #e3dbcb;
-  --line-strong: #d3c8b3;
-  --ink: #1d1c18;
-  --ink-2: #3d3a33;
-  --muted: #5d584e;
-  --faint: #6a645a;
-
-  --pine: #22382b;
-  --pine-ink: #f8f8f5;
-  --sage-wash: #e8ecdf;
-  --signal: #b0461f;
-  --signal-ink: #ffffff;
-  --signal-wash: #f6e6dd;
-  --found: #2f5d3a;
+  /* Form errors. Not the accent, which is spent on the button. */
   --danger: #8f3a1c;
 
-  --focus: color-mix(in srgb, var(--ink) 60%, transparent);
-  --hover: color-mix(in srgb, var(--ink) 5%, transparent);
-  --press: color-mix(in srgb, var(--ink) 8%, transparent);
-  --lift: 0 0 0 1px rgb(20 30 24 / 0.05), 0 1px 2px rgb(20 30 24 / 0.05),
-    0 4px 10px -4px rgb(20 30 24 / 0.08), 0 18px 36px -18px rgb(34 56 43 / 0.22);
-  --btn-lit: inset 0 1px 0 rgb(255 255 255 / 0.16), inset 0 -1px 0 rgb(0 0 0 / 0.18),
-    0 1px 2px rgb(20 30 24 / 0.18);
-
-  --display: "Fraunces", Georgia, "Times New Roman", serif;
-  --sans: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-
-  --ease-statement: cubic-bezier(0.19, 1, 0.22, 1);
-  --dur-statement: 900ms;
-  --dur-utility: 200ms;
-  --dur-exit: 140ms;
-  --dur-press: 80ms;
-
-  --r1: 6px;
-  --r2: 10px;
-  --radius: 14px;
+  /* Panic-proof tap target, page gutter, reading column. */
   --tap: 52px;
-  --gutter: 16px;
+  --gutter: var(--s4);
   --measure: 34rem;
-
-  color-scheme: light;
 }
 
 *,
@@ -70,9 +35,9 @@ html {
 
 body {
   min-height: 100dvh;
-  background: var(--cream);
+  background: var(--paper);
   color: var(--ink);
-  font: 400 1.0625rem/1.55 var(--sans);
+  font: 400 1.0625rem/1.55 var(--font-text);
   letter-spacing: 0.002em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -125,7 +90,7 @@ p {
   border-radius: var(--r2);
   background: var(--raised);
   box-shadow: var(--lift);
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: none;
 }
 .skip:focus {
@@ -153,27 +118,28 @@ p {
 }
 
 .wordmark {
-  font: 600 1.375rem/1 var(--display);
+  font: 400 1.375rem/1 var(--font-display);
   letter-spacing: -0.015em;
   text-decoration: none;
 }
 
 .stack > * + * {
-  margin-top: var(--space, 16px);
+  margin-top: var(--space, var(--s4));
 }
 
 /* ---------- type ---------- */
 
+/* Instrument Serif has one weight. Hierarchy comes from size, never bold. */
 .display {
-  font-family: var(--display);
-  font-weight: 600;
-  letter-spacing: -0.03em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.015em;
   line-height: 0.92;
 }
 
 .eyebrow {
   font-size: 0.8125rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--muted);
 }
@@ -199,6 +165,15 @@ h3 {
   line-height: 1.15;
 }
 
+/* Instrument Sans is loaded at 400 and 600 only. */
+h1,
+h2,
+h3,
+b,
+strong {
+  font-weight: 600;
+}
+
 h2 {
   font-size: 1.375rem;
   letter-spacing: -0.01em;
@@ -214,22 +189,22 @@ h2 {
   min-height: var(--tap);
   padding: 0 24px;
   border: 0;
-  border-radius: 999px;
-  background: var(--pine);
-  color: var(--pine-ink);
+  border-radius: var(--r-pill);
+  background: var(--primary);
+  color: var(--on-primary);
   box-shadow: var(--btn-lit);
-  font: 700 1.0625rem/1 var(--sans);
+  font: 600 1.0625rem/1 var(--font-text);
   letter-spacing: -0.004em;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition:
-    transform var(--dur-utility) ease-out,
-    opacity var(--dur-utility) ease-out;
+    transform var(--dur-calm) var(--ease-out),
+    opacity var(--dur-calm) var(--ease-out);
 }
 .btn:active {
   transform: scale(0.97);
-  transition-duration: var(--dur-press);
+  transition-duration: var(--dur-instant);
 }
 @media (hover: hover) {
   .btn:hover {
@@ -252,8 +227,8 @@ h2 {
 
 /* The one accent. Only "I saw this pet" uses it. */
 .btn-signal {
-  background: var(--signal);
-  color: var(--signal-ink);
+  background: var(--accent);
+  color: var(--on-accent);
   min-height: 60px;
   font-size: 1.1875rem;
 }
@@ -267,7 +242,7 @@ h2 {
   border: 0;
   color: var(--ink);
   font: inherit;
-  font-weight: 700;
+  font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 0.2em;
   white-space: nowrap;
@@ -283,7 +258,7 @@ h2 {
 .field > label,
 .field > .label,
 fieldset.field > legend {
-  font-weight: 700;
+  font-weight: 600;
 }
 fieldset.field {
   border: 0;
@@ -337,11 +312,11 @@ fieldset.field > legend {
   margin-right: 12px;
   padding: 0 20px;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--raised);
   box-shadow: inset 0 0 0 1px var(--line-strong);
   color: var(--ink);
-  font: 700 1rem/1 var(--sans);
+  font: 600 1rem/1 var(--font-text);
   cursor: pointer;
 }
 .field-error {
@@ -369,14 +344,14 @@ fieldset.field > legend {
   align-items: center;
   min-height: 48px;
   padding: 0 18px;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--raised);
   box-shadow: inset 0 0 0 1px var(--line-strong);
   font-weight: 600;
 }
 .choice input:checked + span {
-  background: var(--pine);
-  color: var(--pine-ink);
+  background: var(--primary);
+  color: var(--on-primary);
   box-shadow: var(--btn-lit);
 }
 .choice input:focus-visible + span {
@@ -397,24 +372,24 @@ fieldset.field > legend {
 
 .card {
   background: var(--raised);
-  border-radius: var(--radius);
+  border-radius: var(--r3);
   box-shadow: var(--lift);
   padding: 20px;
 }
 
 .notice {
-  border-radius: var(--radius);
+  border-radius: var(--r3);
   padding: 14px 16px;
-  background: var(--sage-wash);
+  background: var(--done-wash);
   color: var(--ink-2);
 }
 .notice-error {
-  background: var(--signal-wash);
+  background: var(--accent-wash);
   color: var(--danger);
 }
 
 .found-banner {
-  background: var(--found);
+  background: var(--done);
   color: #fff;
   padding: 18px 0;
 }
@@ -428,7 +403,7 @@ fieldset.field > legend {
   grid-row: span 2;
 }
 .found-banner strong {
-  font: 600 1.5rem/1.1 var(--display);
+  font: 400 1.5rem/1.1 var(--font-display);
 }
 
 .glyph {
@@ -454,7 +429,7 @@ fieldset.field > legend {
 
 /* Statement: one per viewport, plays once. */
 .enter-statement {
-  animation: statement var(--dur-statement) var(--ease-statement) both;
+  animation: statement var(--dur-arrive) var(--ease-out) both;
 }
 @keyframes statement {
   from {
@@ -468,7 +443,7 @@ fieldset.field > legend {
 }
 
 .enter-utility {
-  animation: utility var(--dur-utility) ease-out both;
+  animation: utility var(--dur-calm) var(--ease-out) both;
 }
 @keyframes utility {
   from {
@@ -482,7 +457,7 @@ fieldset.field > legend {
 }
 
 .exit {
-  animation: exit var(--dur-exit) ease-in both;
+  animation: exit var(--dur-fast) var(--ease-in) both;
 }
 @keyframes exit {
   to {

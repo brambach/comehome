@@ -8,7 +8,7 @@
   height: min(62vh, 460px);
   min-height: 300px;
   width: 100%;
-  border-radius: var(--radius);
+  border-radius: var(--r3);
   overflow: hidden;
   box-shadow: var(--lift);
   background: var(--sunk);
@@ -50,20 +50,20 @@
   height: 12px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: inset 0 0 0 3px var(--pine);
+  box-shadow: inset 0 0 0 3px var(--primary);
 }
 
 .dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--pine);
+  background: var(--primary);
 }
 
 .area {
   width: 16px;
   height: 10px;
   border-radius: 3px;
-  background: color-mix(in srgb, var(--pine) 14%, transparent);
-  outline: 1px dashed color-mix(in srgb, var(--pine) 55%, transparent);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--primary) 55%, transparent);
 }
