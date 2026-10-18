@@ -27,6 +27,8 @@ export type FlyerData = {
   status: "lost" | "found";
   url: string;
   shortUrl: string;
+  /** "Incline Village & North Shore", from areaName(). */
+  area: string;
   photo: Buffer | null;
 };
 
@@ -74,7 +76,7 @@ function Flyer({ data, qr }: { data: FlyerData; qr: string }) {
       <Page size="LETTER" style={s.page}>
         <View style={s.top}>
           <Text style={s.eyebrow}>{found ? "FOUND" : `LOST ${label}`}</Text>
-          <Text style={s.where}>Tahoe &amp; Truckee</Text>
+          <Text style={s.where}>{data.area}</Text>
         </View>
         {data.photo ? <Image style={s.photo} src={{ data: data.photo, format: "jpg" }} /> : null}
         <Text style={[s.name, { fontSize: nameSize(data.name) }]}>{data.name}</Text>

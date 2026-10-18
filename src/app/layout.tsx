@@ -12,9 +12,9 @@ import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: { default: "comehome: lost pets around Tahoe and Truckee", template: "%s · comehome" },
+  title: { default: "comehome: lost pets in Incline Village and around Lake Tahoe", template: "%s · comehome" },
   description:
-    "Make one shareable page for a lost pet in five minutes. Neighbors report sightings without an account; you see where your pet is moving.",
+    "Make one shareable page for a lost pet in five minutes, starting in Incline Village and the North Shore, and covering Tahoe and Truckee. Neighbors report sightings without an account; you see where your pet is moving.",
 };
 
 export const viewport: Viewport = {

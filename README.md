@@ -1,6 +1,6 @@
 # comehome
 
-When a pet goes missing around Lake Tahoe and Truckee, the owner makes one shareable page in about five minutes: the last-known point, a photo, public sightings drawn as a movement corridor instead of one pin, and a QR flyer to print. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account.
+When a pet goes missing around Lake Tahoe, starting with Incline Village and the North Shore (Crystal Bay, Kings Beach, Tahoe Vista) and covering the rest of Tahoe and Truckee, the owner makes one shareable page in about five minutes: the last-known point, a photo, public sightings drawn as a movement corridor instead of one pin, and a QR flyer to print. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account.
 
 ![Juniper's page with 8 sightings](docs/screenshots/m3-corridor-mobile.png)
 

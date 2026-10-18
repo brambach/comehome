@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { CheckGlyph } from "@/components/Glyph";
 import { PetMap } from "@/components/PetMap";
 import { corridor } from "@/lib/corridor";
+import { areaName } from "@/lib/geo";
 import { getPublicPet, getPublicSightings } from "@/lib/public";
 import { ago, formatDay, formatWhen } from "@/lib/time";
 import styles from "./pet.module.css";
@@ -22,7 +23,7 @@ export async function generateMetadata(props: PageProps<"/p/[slug]">): Promise<M
   const description =
     pet.status === "found"
       ? `${pet.name} has been found. Thank you, Tahoe.`
-      : `Last seen ${formatWhen(pet.lastSeenAt)} near Tahoe and Truckee. Seen ${pet.name}? Report it in 30 seconds, no account.`;
+      : `Last seen ${formatWhen(pet.lastSeenAt)} near ${areaName(pet.lastLat, pet.lastLng).prose}. Seen ${pet.name}? Report it in 30 seconds, no account.`;
   return {
     title,
     description,
@@ -83,7 +84,7 @@ export default async function PetPage(props: PageProps<"/p/[slug]">) {
 
         <div className={styles.info}>
           <p className="eyebrow">
-            {found ? "Found" : `Lost ${SPECIES_LABEL[pet.species]}`} · Tahoe &amp; Truckee
+            {found ? "Found" : `Lost ${SPECIES_LABEL[pet.species]}`} · {areaName(pet.lastLat, pet.lastLng).label}
           </p>
           <h1 className={`display enter-statement ${styles.name}`}>{pet.name}</h1>
           <p className={styles.lastSeen}>

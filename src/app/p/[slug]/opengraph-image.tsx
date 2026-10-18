@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { loadFonts } from "@/lib/fonts";
+import { areaName } from "@/lib/geo";
 import { imageBytes } from "@/lib/images";
 import { palette } from "@/lib/palette";
 import { getPublicPet } from "@/lib/public";
@@ -40,7 +41,7 @@ export default async function Image(props: { params: Promise<{ slug: string }> }
           }}
         >
           <div style={{ fontFamily: "Instrument Sans", fontWeight: 600, fontSize: 26, color: palette.muted, letterSpacing: 1 }}>
-            {`${found ? "Found" : `Lost ${label}`} · Tahoe & Truckee`}
+            {`${found ? "Found" : `Lost ${label}`} · ${pet ? areaName(pet.lastLat, pet.lastLng).label : "Incline Village & North Shore"}`}
           </div>
           <div
             style={{
