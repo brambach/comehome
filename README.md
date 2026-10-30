@@ -4,7 +4,7 @@
 
 **A lost-pet network for Lake Tahoe. When a pet goes missing, the neighbors nearby hear in minutes, every sighting draws onto one trail, and the owner sees where to look at dusk.**
 
-[Live demo](https://comehome-bryce-rambachs-projects.vercel.app/p/juniper-demo) · [Why I built it](#why-i-built-it) · [What's in it](#whats-in-it) · [Run it](#run-it-locally) · [Deploy](#deploy-to-vercel) · [Privacy](#privacy)
+[Live demo](https://comehome-ochre.vercel.app/p/juniper-demo) · [Why I built it](#why-i-built-it) · [What's in it](#whats-in-it) · [Run it](#run-it-locally) · [Deploy](#deploy-to-vercel) · [Privacy](#privacy)
 
 </div>
 
@@ -22,7 +22,7 @@ The owner makes a page: a pin, a photo, a time. Neighbors who signed up for aler
 
 It starts in Incline Village and the North Shore (Crystal Bay, Kings Beach, Tahoe Vista), and pages work anywhere around Lake Tahoe and Truckee.
 
-> **Status.** Built and tested end to end, with a [live demo](https://comehome-bryce-rambachs-projects.vercel.app/p/juniper-demo) running on an in-memory database with made-up pets. The real thing needs a Postgres, an email sender and a Twilio number ([Deploy to Vercel](#deploy-to-vercel)), and owner interviews come next ([`docs/INTERVIEWS.md`](docs/INTERVIEWS.md)).
+> **Status.** Built and tested end to end, with a [live demo](https://comehome-ochre.vercel.app/p/juniper-demo) running on an in-memory database with made-up pets. The real thing needs a Postgres, an email sender and a Twilio number ([Deploy to Vercel](#deploy-to-vercel)), and owner interviews come next ([`docs/INTERVIEWS.md`](docs/INTERVIEWS.md)).
 
 ## Why I built it
 
