@@ -1,7 +1,9 @@
 "use server";
 
+import { after } from "next/server";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { alertFound } from "@/lib/neighbors";
 import { getOwnedPet, setFound, setSightingHidden, updatePetDetails } from "@/lib/pets";
 import { petEditInput } from "@/lib/validate";
 
@@ -22,8 +24,12 @@ export async function toggleSighting(form: FormData) {
 
 export async function toggleFound(form: FormData) {
   const { pet, back } = await owned(form);
-  await setFound(pet, form.get("found") === "1");
-  redirect(back);
+  const found = form.get("found") === "1";
+  const note = z.string().trim().max(600).catch("").parse(form.get("foundNote") ?? "");
+  await setFound(pet, found, note);
+  // Everyone who was asked to look hears that it's over.
+  if (found) after(() => alertFound(pet).catch((err) => console.error("alertFound", err)).then(() => {}));
+  redirect(found ? `/p/${pet.slug}?home=1` : back);
 }
 
 export async function saveDetails(form: FormData) {

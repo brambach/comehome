@@ -25,6 +25,11 @@ export const petInput = z
     lng,
     lastSeenAt: pastTime,
     ownerEmail: z.string().trim().toLowerCase().email("That email doesn't look right.").max(200),
+    // A checkbox: present means yes. Defaults on, since the first hour is when alerts matter.
+    alertNeighbors: z
+      .union([z.boolean(), z.string()])
+      .default(true)
+      .transform((v) => v === true || v === "on" || v === "1" || v === "true"),
   })
   .refine((v) => inServiceArea(v.lat, v.lng), outsideArea);
 
@@ -35,6 +40,19 @@ export const sightingInput = z
     seenAt: pastTime,
     note: z.string().trim().max(500).default(""),
     contact: z.string().trim().max(200).default(""),
+    /** The token from a text report's link, when the sighting started as a text. */
+    report: z.string().trim().max(64).default(""),
+  })
+  .refine((v) => inServiceArea(v.lat, v.lng), outsideArea);
+
+export const watcherInput = z
+  .object({
+    email: z.string().trim().toLowerCase().email("That email doesn't look right.").max(200),
+    phone: z.string().trim().max(30).default(""),
+    texts: z.string().optional(),
+    lat: z.coerce.number({ message: "Drop a pin on your home or street." }).min(-90).max(90),
+    lng: z.coerce.number().min(-180).max(180),
+    radiusM: z.coerce.number().int().refine((m) => [800, 1600, 3200].includes(m), "Pick a distance."),
   })
   .refine((v) => inServiceArea(v.lat, v.lng), outsideArea);
 

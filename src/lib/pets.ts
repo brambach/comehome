@@ -1,9 +1,10 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import type { z } from "zod";
 import { db } from "@/lib/db";
 import { petPhotos, pets, sightings, type Pet, type Sighting } from "@/lib/db/schema";
 import { petSlug } from "@/lib/slug";
 import { saveImage } from "@/lib/storage";
+import { textCodeFor } from "@/lib/textReports";
 import { hashToken, newEditToken, tokenMatches } from "@/lib/tokens";
 import type { petEditInput, petInput, sightingInput } from "@/lib/validate";
 
@@ -28,6 +29,8 @@ export async function createPet(input: z.infer<typeof petInput>, photos: Blob[])
             lastLng: input.lng,
             ownerEmail: input.ownerEmail,
             editTokenHash: hashToken(token),
+            textCode: textCodeFor(input.name),
+            alertNeighbors: input.alertNeighbors,
           })
           .returning();
         if (stored.length) {
@@ -39,7 +42,7 @@ export async function createPet(input: z.infer<typeof petInput>, photos: Blob[])
       });
       return { pet, token };
     } catch (err) {
-      if (isUniqueViolation(err)) continue; // slug collision: try another suffix
+      if (isUniqueViolation(err)) continue; // slug or text code collision: try other suffixes
       throw err;
     }
   }
@@ -51,8 +54,10 @@ export async function createSighting(
   input: z.infer<typeof sightingInput>,
   photo: Blob | null,
   ipHash: string | null,
+  /** From a text report: its already-stored photo and the sender's number. */
+  fromText?: { photoUrl: string | null; phone: string },
 ): Promise<Sighting> {
-  const stored = photo ? await saveImage(photo, "sightings") : null;
+  const stored = photo ? await saveImage(photo, "sightings") : fromText?.photoUrl ? { url: fromText.photoUrl } : null;
   const [row] = await db()
     .insert(sightings)
     .values({
@@ -61,7 +66,7 @@ export async function createSighting(
       lng: input.lng,
       seenAt: input.seenAt,
       note: input.note,
-      reporterContact: input.contact || null,
+      reporterContact: input.contact || fromText?.phone || null,
       photoUrl: stored?.url ?? null,
       ipHash,
     })
@@ -91,11 +96,19 @@ export async function setSightingHidden(pet: Pet, sightingId: string, hidden: bo
     .where(and(eq(sightings.id, sightingId), eq(sightings.petId, pet.id)));
 }
 
-export async function setFound(pet: Pet, found: boolean) {
+export async function setFound(pet: Pet, found: boolean, foundNote = "") {
   await db()
     .update(pets)
-    .set({ status: found ? "found" : "lost", foundAt: found ? new Date() : null })
+    .set({ status: found ? "found" : "lost", foundAt: found ? new Date() : null, foundNote: found ? foundNote : "" })
     .where(eq(pets.id, pet.id));
+}
+
+/** A flyer QR scan. Counted, nothing else stored. */
+export async function countFlyerScan(petId: string) {
+  await db()
+    .update(pets)
+    .set({ flyerScans: sql`${pets.flyerScans} + 1` })
+    .where(eq(pets.id, petId));
 }
 
 export async function updatePetDetails(pet: Pet, input: z.infer<typeof petEditInput>) {

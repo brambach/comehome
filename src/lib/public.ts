@@ -3,7 +3,7 @@
  * owner emails, reporter contacts, IP hashes and token hashes can't leak by
  * accident when the schema grows. tests/unit/public.test.ts holds the line.
  */
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { petPhotos, pets, sightings } from "@/lib/db/schema";
 
@@ -18,6 +18,9 @@ export const publicPetColumns = {
   lastLng: pets.lastLng,
   status: pets.status,
   foundAt: pets.foundAt,
+  foundNote: pets.foundNote,
+  textCode: pets.textCode,
+  flyerScans: pets.flyerScans,
 };
 
 export const publicSightingColumns = {
@@ -41,6 +44,10 @@ export type PublicPet = {
   lastLng: number;
   status: "lost" | "found";
   foundAt: Date | null;
+  foundNote: string;
+  /** Printed on the flyer: text a photo with this word. */
+  textCode: string | null;
+  flyerScans: number;
   photos: PublicPhoto[];
 };
 export type PublicSighting = {
@@ -70,4 +77,56 @@ export async function getPublicSightings(petId: string): Promise<PublicSighting[
     .from(sightings)
     .where(and(eq(sightings.petId, petId), eq(sightings.hidden, false)))
     .orderBy(asc(sightings.seenAt));
+}
+
+export type OpenPet = Omit<PublicPet, "photos"> & {
+  photo: PublicPhoto | null;
+  sightingCount: number;
+  latestSeenAt: Date;
+};
+
+/**
+ * Pets still missing, newest activity first: the town board, the home page
+ * list and the feed shelters and vets subscribe to. Pages quiet for more than
+ * `days` drop off so the board stays about now.
+ */
+export async function getOpenPets(days = 60): Promise<OpenPet[]> {
+  const since = new Date(Date.now() - days * 24 * 3600_000);
+  const latest = sql<Date>`greatest(${pets.lastSeenAt}, coalesce(max(${sightings.seenAt}), ${pets.lastSeenAt}))`;
+  const rows = await db()
+    .select({
+      ...publicPetColumns,
+      sightingCount: sql<number>`count(${sightings.id})::int`,
+      latestSeenAt: latest,
+    })
+    .from(pets)
+    .leftJoin(sightings, and(eq(sightings.petId, pets.id), eq(sightings.hidden, false)))
+    .where(eq(pets.status, "lost"))
+    .groupBy(pets.id)
+    .having(gte(latest, since))
+    .orderBy(desc(latest))
+    .limit(50);
+  if (!rows.length) return [];
+  const photos = await db()
+    .select({ petId: petPhotos.petId, url: petPhotos.url, width: petPhotos.width, height: petPhotos.height })
+    .from(petPhotos)
+    .where(and(inArray(petPhotos.petId, rows.map((r) => r.id)), eq(petPhotos.position, 0)));
+  const byPet = new Map(photos.map((p) => [p.petId, { url: p.url, width: p.width, height: p.height }]));
+  return rows.map((r) => ({
+    ...r,
+    latestSeenAt: new Date(r.latestSeenAt),
+    sightingCount: Number(r.sightingCount),
+    photo: byPet.get(r.id) ?? null,
+  }));
+}
+
+/** Pets found in the last `days`, for the "home" strip. */
+export async function getRecentlyFound(days = 90) {
+  const since = new Date(Date.now() - days * 24 * 3600_000);
+  return db()
+    .select({ slug: pets.slug, name: pets.name, foundAt: pets.foundAt, lastSeenAt: pets.lastSeenAt })
+    .from(pets)
+    .where(and(eq(pets.status, "found"), gte(pets.foundAt, since)))
+    .orderBy(desc(pets.foundAt))
+    .limit(6);
 }

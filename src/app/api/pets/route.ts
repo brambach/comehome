@@ -2,6 +2,7 @@ import { after, NextResponse, type NextRequest } from "next/server";
 import { ImageError } from "@/lib/exif";
 import { badRequest, tooMany } from "@/lib/http";
 import { notifyPetCreated } from "@/lib/notify";
+import { alertForNewPet } from "@/lib/neighbors";
 import { createPet } from "@/lib/pets";
 import { clientIp, hashIp, rateLimit } from "@/lib/ratelimit";
 import { fieldErrors, formFields, formFiles, petInput } from "@/lib/validate";
@@ -26,7 +27,10 @@ export async function POST(req: NextRequest) {
 
   try {
     const { pet, token } = await createPet(parsed.data, photos);
-    after(() => notifyPetCreated(pet, token).catch((err) => console.error("notifyPetCreated", err)));
+    after(async () => {
+      await notifyPetCreated(pet, token).catch((err) => console.error("notifyPetCreated", err));
+      await alertForNewPet(pet).catch((err) => console.error("alertForNewPet", err));
+    });
     return NextResponse.json({ ok: true, slug: pet.slug, token });
   } catch (err) {
     if (err instanceof ImageError) return badRequest({ photos: err.message });

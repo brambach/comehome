@@ -14,6 +14,7 @@ export async function makePet(overrides: Partial<{ name: string; ownerEmail: str
       lng: -120.1833,
       lastSeenAt: new Date(Date.now() - 6 * 3600_000),
       ownerEmail: overrides.ownerEmail ?? "owner-secret@example.com",
+      alertNeighbors: true,
     },
     [new Blob([new Uint8Array(await fixture("dog-grass.jpg"))])],
   );
@@ -31,6 +32,7 @@ export async function addSighting(
       seenAt: new Date(Date.now() - opts.minutesAgo * 60_000),
       note: opts.note ?? "",
       contact: opts.contact ?? "",
+      report: "",
     },
     null,
     null,
