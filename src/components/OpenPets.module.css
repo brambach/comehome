@@ -1,0 +1,60 @@
+.list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 10px;
+  margin-inline: -10px;
+  border-radius: var(--r3);
+  text-decoration: none;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+/* Hover dims the others, so the list stays quiet. */
+@media (hover: hover) {
+  .list:hover .row {
+    opacity: 0.55;
+  }
+  .list:hover .row:hover {
+    opacity: 1;
+  }
+}
+
+.photo {
+  display: block;
+  padding: 5px 5px 7px;
+}
+
+.photo img {
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.text {
+  display: grid;
+  gap: 2px;
+}
+
+.name {
+  font: 400 2rem/1 var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.meta {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+@media (min-width: 760px) {
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 40px;
+  }
+}

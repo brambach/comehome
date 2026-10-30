@@ -103,7 +103,7 @@ export async function getOpenPets(days = 60): Promise<OpenPet[]> {
     .leftJoin(sightings, and(eq(sightings.petId, pets.id), eq(sightings.hidden, false)))
     .where(eq(pets.status, "lost"))
     .groupBy(pets.id)
-    .having(gte(latest, since))
+    .having(sql`${latest} >= ${since.toISOString()}::timestamptz`)
     .orderBy(desc(latest))
     .limit(50);
   if (!rows.length) return [];
@@ -129,4 +129,9 @@ export async function getRecentlyFound(days = 90) {
     .where(and(eq(pets.status, "found"), gte(pets.foundAt, since)))
     .orderBy(desc(pets.foundAt))
     .limit(6);
+}
+
+export async function getPublicPetById(id: string): Promise<PublicPet | null> {
+  const [row] = await db().select({ slug: pets.slug }).from(pets).where(eq(pets.id, id)).limit(1);
+  return row ? getPublicPet(row.slug) : null;
 }

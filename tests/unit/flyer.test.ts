@@ -45,7 +45,7 @@ describe("flyer", () => {
     expect(info).toMatch(/Pages:\s+1/);
     expect(info).toMatch(/Page size:\s+612 x 792 pts \(letter\)/);
 
-    expect(decodeQr(pdf)).toBe("https://comehome.test/p/juniper-k7q2");
+    expect(decodeQr(pdf)).toBe("https://comehome.test/p/juniper-k7q2?f=1");
 
     const text = pdfText(pdf);
     expect(text).toContain("LOST DOG");
@@ -67,7 +67,7 @@ describe("flyer", () => {
       photo: await fixture("dog-window.jpg"),
     });
     expect(execFileSync("pdfinfo", ["-"], { input: pdf }).toString()).toMatch(/Pages:\s+1/);
-    expect(decodeQr(pdf)).toBe("https://comehome.test/p/sir-reginald-abcd");
+    expect(decodeQr(pdf)).toBe("https://comehome.test/p/sir-reginald-abcd?f=1");
   });
 
   it("sizes long names down so they fit", () => {

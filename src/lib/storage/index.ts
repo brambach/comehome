@@ -2,6 +2,7 @@ import { randomBytes } from "node:crypto";
 import { stripExif } from "@/lib/exif";
 import { blobStorage } from "./blob";
 import { diskStorage } from "./disk";
+import { memoryStorage } from "./memory";
 
 export type StoredFile = { url: string };
 
@@ -10,7 +11,9 @@ export interface Storage {
 }
 
 export function storage(): Storage {
-  return process.env.STORAGE_DRIVER === "blob" ? blobStorage() : diskStorage();
+  if (process.env.STORAGE_DRIVER === "blob") return blobStorage();
+  if (process.env.STORAGE_DRIVER === "memory") return memoryStorage();
+  return diskStorage();
 }
 
 /** The only way images reach storage: strip metadata, then store under a random key. */

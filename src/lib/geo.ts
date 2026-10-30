@@ -25,10 +25,10 @@ export function onNorthShore(lat: number, lng: number): boolean {
 }
 
 /** Where a pet page says it is, from the last-seen point. */
-export function areaName(lat: number, lng: number): { label: string; prose: string } {
+export function areaName(lat: number, lng: number): { label: string; short: string; prose: string } {
   return onNorthShore(lat, lng)
-    ? { label: "Incline Village & North Shore", prose: "Incline Village and the North Shore" }
-    : { label: "Tahoe & Truckee", prose: "Tahoe and Truckee" };
+    ? { label: "Incline Village & North Shore", short: "North Shore", prose: "Incline Village and the North Shore" }
+    : { label: "Tahoe & Truckee", short: "Tahoe & Truckee", prose: "Tahoe and Truckee" };
 }
 
 const EARTH_M = 6_371_008.8;

@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { CreatePetForm } from "@/components/CreatePetForm";
+import { networkSize } from "@/lib/neighbors";
 
 export const metadata: Metadata = { title: "Make a page" };
 
-export default function NewPetPage() {
+export const dynamic = "force-dynamic";
+
+export default async function NewPetPage() {
+  const neighbors = await networkSize();
   return (
     <div className="wrap narrow">
       <div className="stack" style={{ paddingBlock: "16px 64px", ["--space" as string]: "24px" }}>
@@ -16,7 +20,7 @@ export default function NewPetPage() {
             the page.
           </p>
         </div>
-        <CreatePetForm />
+        <CreatePetForm neighbors={neighbors} />
       </div>
     </div>
   );

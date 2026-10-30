@@ -56,8 +56,8 @@ describe("likely heading", () => {
     expect(h.bearing).toBeLessThan(45);
   });
 
-  it("keeps its reach between 250 m and 2 km", () => {
-    expect(likelyHeading(walk([90, 90, 90], 60), NOW)!.reachM).toBe(250);
+  it("keeps its reach between 600 m and 2 km", () => {
+    expect(likelyHeading(walk([90, 90, 90], 60), NOW)!.reachM).toBe(600);
     expect(likelyHeading(walk([90, 90, 90], 3000, 10), NOW)!.reachM).toBe(2000);
   });
 

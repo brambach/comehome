@@ -8,7 +8,7 @@ test("the home page leads with Incline Village and tells Boots's story", async (
   await expect(page.getByText(/Crystal Bay, Kings Beach and Tahoe Vista/)).toBeVisible();
 
   const story = page.getByRole("region", { name: "Why I built this" });
-  await expect(story).toContainText("went missing in Incline Village for about 50 days");
+  await expect(story).toContainText("went missing in Incline Village for 51 days");
 
   const photo = story.getByRole("img", { name: /Boots, a black-and-white tuxedo cat/ });
   await photo.scrollIntoViewIfNeeded();
@@ -27,7 +27,7 @@ test.describe("a pet lost in Incline Village", () => {
   test("its page says Incline Village & North Shore", async ({ page }) => {
     const { publicUrl } = await createPet(page, "Socks");
     await page.goto(publicUrl);
-    await expect(page.locator(".eyebrow").first()).toHaveText("Lost dog · Incline Village & North Shore");
+    await expect(page.getByText("Lost dog · North Shore")).toBeVisible();
     await expect(page.locator('meta[name="description"]')).toHaveAttribute("content", /near Incline Village/);
   });
 });

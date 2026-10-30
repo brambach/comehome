@@ -7,6 +7,7 @@ import "@fontsource/jetbrains-mono/latin-400.css";
 import "@brambach/design-tokens/tokens.css";
 import "@brambach/design-tokens/themes/warm-paper.css";
 import "./globals.css";
+import { isDemo } from "@/lib/db";
 import { palette } from "@/lib/palette";
 import { siteUrl } from "@/lib/site";
 
@@ -30,6 +31,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip" href="#main">
           Skip to content
         </a>
+        {isDemo() ? (
+          <p className="demo-band" data-testid="demo-band">
+            <span className="wrap">
+              Demo. Juniper, Pepper and Mochi are made up, and nothing you send leaves this server.
+            </span>
+          </p>
+        ) : null}
         <header className="wrap site-head">
           <Link href="/" className="wordmark">
             comehome

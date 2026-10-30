@@ -1,0 +1,155 @@
+.frame {
+  display: grid;
+  gap: 12px;
+}
+
+/* The map is a sheet of paper on the page: lifted, warm, no tile colors. */
+.paper {
+  position: relative;
+  height: min(58vh, 500px);
+  min-height: 340px;
+  border-radius: var(--r3);
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--lift);
+  isolation: isolate;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+.map :global(.maplibregl-ctrl-attrib) {
+  font-size: 11px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+
+.map :global(.maplibregl-ctrl-group) {
+  background: var(--raised);
+  box-shadow: var(--lift);
+  border-radius: var(--r2);
+}
+
+.ink {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 1;
+}
+
+.ink:not([data-played]) {
+  opacity: 0;
+}
+
+.hull {
+  fill: var(--ink);
+  fill-opacity: 0.045;
+  stroke: var(--ink);
+  stroke-opacity: 0.35;
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.cone {
+  fill: url(#cone-hatch);
+  stroke: var(--ink);
+  stroke-opacity: 0.7;
+  stroke-width: 1.4;
+  stroke-dasharray: 1 4;
+  stroke-linecap: round;
+}
+
+.hatchLine {
+  stroke: var(--ink);
+  stroke-opacity: 0.4;
+  stroke-width: 1.2;
+}
+
+.trail {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* One stroke home. The one place the done color shows on the map. */
+.close {
+  fill: none;
+  stroke: var(--done);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+
+.ink [data-role="stop"] {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2;
+}
+
+.ink [data-role="newest"] {
+  fill: var(--ink);
+  stroke: var(--paper);
+  stroke-width: 2.5;
+}
+
+.ink [data-role="halo"] {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.45;
+  stroke-width: 1.2;
+}
+
+.ink [data-role="origin"] {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2.4;
+}
+
+.ink [data-role="origin-dot"] {
+  fill: var(--ink);
+}
+
+.labels text {
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  fill: var(--ink);
+  paint-order: stroke;
+  stroke: var(--paper);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+
+.note {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 8px 12px;
+  border-radius: var(--r2);
+  background: color-mix(in srgb, var(--raised) 92%, transparent);
+  box-shadow: var(--lift);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.newNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+/* A ring, matching the halo around the newest sighting on the map. */
+.newMark {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+}

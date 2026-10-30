@@ -78,3 +78,32 @@
     width: auto;
   }
 }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actions :global(.btn) {
+  flex: 1 1 auto;
+}
+
+.board {
+  display: grid;
+  gap: var(--s4);
+  padding-block: 8px var(--s6);
+}
+
+.boardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+@media (min-width: 760px) {
+  .actions :global(.btn) {
+    flex: 0 0 auto;
+  }
+}

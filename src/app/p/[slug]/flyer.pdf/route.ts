@@ -3,6 +3,7 @@ import { areaName } from "@/lib/geo";
 import { imageBytes } from "@/lib/images";
 import { getPublicPet } from "@/lib/public";
 import { petUrl, shortPetUrl } from "@/lib/site";
+import { textNumber } from "@/lib/sms";
 
 export const runtime = "nodejs";
 
@@ -22,6 +23,7 @@ export async function GET(_req: Request, ctx: RouteContext<"/p/[slug]/flyer.pdf"
     shortUrl: shortPetUrl(pet.slug),
     area: areaName(pet.lastLat, pet.lastLng).label,
     photo,
+    text: textNumber() && pet.textCode ? { number: textNumber(), code: pet.textCode } : null,
   });
   return new Response(new Uint8Array(pdf), {
     headers: {

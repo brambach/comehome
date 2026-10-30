@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { localDateTimeValue, localValueToIso, postForm, shrinkImage } from "./clientImage";
 import { PhotoInput } from "./PhotoInput";
@@ -13,21 +13,23 @@ export function SightingForm({
   name,
   centerLat,
   centerLng,
+  report,
 }: {
   slug: string;
   name: string;
   centerLat: number;
   centerLng: number;
+  /** A sighting that started as a text: its token and the photo they already sent. */
+  report?: { token: string; photoUrl: string | null };
 }) {
+  const router = useRouter();
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [formKey, setFormKey] = useState(0);
   const when = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (when.current && !when.current.value) when.current.value = localDateTimeValue();
-  }, [formKey]);
+  }, []);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -38,46 +40,24 @@ export function SightingForm({
     }
     const body = new FormData();
     for (const key of ["lat", "lng", "note", "contact", "website"]) body.set(key, String(raw.get(key) ?? ""));
+    if (report) body.set("report", report.token);
     body.set("seenAt", localValueToIso(String(raw.get("seenAt") ?? "")));
     const photo = raw.get("photo");
     setBusy(true);
     setErrors({});
     if (photo instanceof File && photo.size > 0) body.set("photo", await shrinkImage(photo), "photo.jpg");
     const res = await postForm<{ id?: string }>(`/api/pets/${slug}/sightings`, body);
+    if (res.ok && res.id) {
+      // Back to the page, where their pin drops onto the trail.
+      router.push(`/p/${slug}?seen=${res.id}#trail`);
+      return;
+    }
     setBusy(false);
-    if (res.ok) setSent(true);
-    else setErrors(res.errors);
-  }
-
-  if (sent) {
-    return (
-      <div className="stack card enter-utility" role="status" data-testid="sighting-sent">
-        <h2>Thank you. {name}&apos;s owner has it.</h2>
-        <p className="muted">
-          It&apos;s on the map now. If you see {name} again, report it again: each sighting sharpens
-          the trail.
-        </p>
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <Link href={`/p/${slug}`} className="btn">
-            Back to {name}&apos;s page
-          </Link>
-          <button
-            type="button"
-            className="btn btn-quiet"
-            onClick={() => {
-              setSent(false);
-              setFormKey((k) => k + 1);
-            }}
-          >
-            Report another
-          </button>
-        </div>
-      </div>
-    );
+    if (!res.ok) setErrors(res.errors);
   }
 
   return (
-    <form key={formKey} onSubmit={onSubmit} noValidate className="stack" style={{ ["--space" as string]: "26px" }}>
+    <form onSubmit={onSubmit} noValidate className="stack" style={{ ["--space" as string]: "26px" }}>
       {errors.form ? (
         <p className="notice notice-error" role="alert">
           {errors.form}
@@ -100,6 +80,13 @@ export function SightingForm({
         {errors.seenAt ? <p className="field-error">{errors.seenAt}</p> : null}
       </div>
 
+      {report?.photoUrl ? (
+        <figure className="field">
+          <p className="label">Your photo</p>
+          {/* eslint-disable-next-line @next/next/no-img-element -- already stripped and stored; a plain preview */}
+          <img src={report.photoUrl} alt="The photo you texted" className="print" style={{ maxWidth: 240 }} />
+        </figure>
+      ) : (
       <PhotoInput
         name="photo"
         label={
@@ -109,6 +96,7 @@ export function SightingForm({
         }
         error={errors.photo}
       />
+      )}
 
       <div className="field">
         <label htmlFor="s-note">
@@ -126,6 +114,7 @@ export function SightingForm({
         />
       </div>
 
+      {report ? null : (
       <div className="field">
         <label htmlFor="s-contact">
           Your phone or email <span className="optional">(optional)</span>
@@ -135,6 +124,7 @@ export function SightingForm({
         </p>
         <input id="s-contact" name="contact" autoComplete="tel" maxLength={200} aria-describedby="d-contact" />
       </div>
+      )}
 
       <div className="hp" aria-hidden="true">
         <label htmlFor="s-website">Website</label>

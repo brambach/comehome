@@ -23,7 +23,7 @@ export async function createPet(page: Page, name = "Mochi") {
   await page.getByLabel(/Description/).fill("Shiba, red coat, blue collar. Shy: please don't chase.");
   await page.getByRole("button", { name: "Use my location" }).click();
   await expect(page.getByTestId("point-status")).toContainText("Pin at 39.");
-  await page.getByLabel("Your email").fill("owner@example.com");
+  await page.getByLabel("Your email", { exact: true }).fill("owner@example.com");
   await page.getByRole("button", { name: "Publish the page" }).click();
   await expect(page.getByTestId("created-notice")).toBeVisible({ timeout: 20_000 });
   const publicUrl = await page.getByTestId("public-link").inputValue();

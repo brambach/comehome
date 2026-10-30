@@ -27,6 +27,6 @@ export default defineConfig({
     port,
     reuseExistingServer: true,
     // A fresh salt per run gives the test client a new rate-limit identity.
-    env: { SITE_URL: `http://localhost:${port}`, RATE_LIMIT_SALT: `e2e-${Date.now()}` },
+    env: { SITE_URL: `http://localhost:${port}`, RATE_LIMIT_SALT: `e2e-${Date.now()}`, TWILIO_AUTH_TOKEN: "e2e-twilio" },
   },
 });

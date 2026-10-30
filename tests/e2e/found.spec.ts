@@ -3,16 +3,23 @@ import { createPet, DONNER } from "./helpers";
 
 test.use({ geolocation: DONNER, permissions: ["geolocation"] });
 
-test("marking found shows the banner and closes the form", async ({ page, request }) => {
+test("marking found turns the page into the found story and closes the form", async ({ page, request }) => {
   const { slug, publicUrl, editUrl } = await createPet(page, "Waffles");
 
   await page.goto(editUrl);
+  await page.getByLabel(/How did they come home/).fill("Asleep under the neighbor's deck.");
   await page.getByTestId("toggle-found").click();
-  await expect(page.getByTestId("toggle-found")).toHaveText("Reopen the search");
 
-  await page.goto(publicUrl);
+  // The owner lands on the public page, where the route closes.
+  await expect(page).toHaveURL(new RegExp(`/p/${slug}\\?home=1`));
   await expect(page.getByTestId("found-banner")).toBeVisible();
   await expect(page.getByTestId("found-banner")).toContainText("Waffles is home.");
+  await expect(page.getByTestId("found-banner")).toContainText("Missing");
+  await expect(page.getByTestId("found-banner")).toContainText("Asleep under the neighbor's deck.");
+
+  await page.goto(editUrl);
+  await expect(page.getByTestId("toggle-found")).toHaveText("Reopen the search");
+  await page.goto(publicUrl);
   await expect(page.getByRole("link", { name: "I saw this pet" })).toHaveCount(0);
 
   await page.goto(`${publicUrl}/seen`);

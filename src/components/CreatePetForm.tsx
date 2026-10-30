@@ -8,7 +8,7 @@ import { PointPicker } from "./PointPicker";
 
 type Errors = Record<string, string>;
 
-export function CreatePetForm() {
+export function CreatePetForm({ neighbors }: { neighbors: number }) {
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
   const router = useRouter();
@@ -27,6 +27,7 @@ export function CreatePetForm() {
       body.set(key, String(raw.get(key) ?? ""));
     }
     body.set("lastSeenAt", localValueToIso(String(raw.get("lastSeenAt") ?? "")));
+    body.set("alertNeighbors", raw.get("alertNeighbors") ? "1" : "0");
 
     const local: Errors = {};
     if (!raw.get("lat")) local.lat = "Drop a pin where you last saw them.";
@@ -128,6 +129,18 @@ export function CreatePetForm() {
         />
         {errors.ownerEmail ? <p className="field-error">{errors.ownerEmail}</p> : null}
       </div>
+
+      <label className="check" htmlFor="f-alert">
+        <input id="f-alert" type="checkbox" name="alertNeighbors" defaultChecked />
+        <span>
+          <strong>Alert neighbors near where you lost them</strong>
+          <span className="hint">
+            {neighbors > 0
+              ? `${neighbors} people around Tahoe get comehome alerts. The ones whose area covers your pin get one text or email with the photo and the page link. Never your email.`
+              : "People who signed up for alerts near your pin get one text or email with the photo and the page link. Never your email."}
+          </span>
+        </span>
+      </label>
 
       <div className="hp" aria-hidden="true">
         <label htmlFor="f-website">Website</label>

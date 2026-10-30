@@ -1,11 +1,17 @@
 import { getImageProps } from "next/image";
 import Link from "next/link";
+import { OpenPets } from "@/components/OpenPets";
+import { networkSize } from "@/lib/neighbors";
+import { getOpenPets } from "@/lib/public";
 import boots from "../../assets/images/boots.jpg";
 import styles from "./home.module.css";
 
 const BOOTS_ALT = "Boots, a black-and-white tuxedo cat, asleep and curled up on a cream blanket.";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [open, neighbors] = await Promise.all([getOpenPets(), networkSize()]);
   // getImageProps, not <Image>: a plain <img> keeps the home page free of client JS.
   const { props: bootsImg } = getImageProps({
     src: boots,
@@ -23,13 +29,28 @@ export default function Home() {
           home.
         </h1>
         <p className="lede">
-          One page for your lost pet, ready to share in five minutes. Neighbors report sightings
-          without an account, and you see where your pet is heading.
+          When a pet goes missing around Lake Tahoe, the first hour matters most. comehome gets the
+          neighbors nearby looking, turns what they see into a trail, and shows you where to stand at dusk.
         </p>
-        <Link href="/new" className="btn btn-block">
-          Make a page for my pet
-        </Link>
+        <div className={styles.actions}>
+          <Link href="/new" className="btn">
+            Make a page for my pet
+          </Link>
+          <Link href="/neighbors" className="btn btn-quiet">
+            Get alerts near me
+          </Link>
+        </div>
       </section>
+
+      {open.length ? (
+        <section className={styles.board} aria-labelledby="missing">
+          <div className={styles.boardHead}>
+            <h2 id="missing">Missing right now</h2>
+            {open.length > 4 ? <Link href="/lost">All {open.length}</Link> : null}
+          </div>
+          <OpenPets pets={open.slice(0, 4)} />
+        </section>
+      ) : null}
 
       <ol className={styles.steps}>
         <li>
@@ -42,9 +63,10 @@ export default function Home() {
         <li>
           <span className={styles.num}>2</span>
           <div>
-            <h2>Share the link</h2>
+            <h2>Neighbors hear in minutes</h2>
             <p className="muted">
-              Post it to Facebook groups and Nextdoor, and print the QR flyer.
+              {neighbors >= 10 ? `${neighbors} people` : "People"} who signed up get one text or email if your
+              pin is near them. Print the flyer too: it has a QR code and a number to text a photo to.
             </p>
           </div>
         </li>
@@ -53,7 +75,7 @@ export default function Home() {
           <div>
             <h2>Watch the trail</h2>
             <p className="muted">
-              Each sighting lands on the map as a corridor, so you know where to search next.
+              Each sighting draws onto the map, with a careful guess at where they&apos;re heading next.
             </p>
           </div>
         </li>
@@ -68,11 +90,11 @@ export default function Home() {
           <h2 id="why">Why I built this</h2>
           <p>
             Boots is my family&apos;s cat, a black-and-white tuxedo. She went missing in Incline Village
-            for about 50 days.
+            for 51 days.
           </p>
           <p>
-            My parents put up flyers and went through neighborhoods knocking on doors. That&apos;s why I
-            built comehome: so the next family has one link to share, and every sighting lands on one
+            My parents put up flyers and went door to door, and she did come home. comehome is the
+            thing that does the knocking for the next family, and gets everyone&apos;s sightings onto one
             map.
           </p>
           <p className="muted">Bryce</p>
@@ -85,6 +107,9 @@ export default function Home() {
           around Lake Tahoe and Truckee.
         </p>
         <p>No accounts. Your email stays private and is used only to tell you about sightings.</p>
+        <p>
+          Shelters and vets: every open page is in a <Link href="/lost">live list and feed</Link>.
+        </p>
       </div>
     </div>
   );

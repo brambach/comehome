@@ -21,10 +21,12 @@ test("a stranger reports a sighting with at most 4 required inputs", async ({ pa
   await page.getByRole("button", { name: "Use my location" }).click();
   await expect(page.getByTestId("point-status")).toContainText("Pin at 39.32");
   await page.getByRole("button", { name: "Send to the owner" }).click();
-  await expect(page.getByTestId("sighting-sent")).toBeVisible();
 
-  await page.goto(publicUrl);
+  // Back on the pet's page, where their pin drops onto the trail.
+  await expect(page.getByTestId("sighting-thanks")).toBeVisible();
+  expect(new URL(page.url()).searchParams.get("seen")).toMatch(/^[0-9a-f-]{36}$/);
   await expect(page.getByTestId("latest-sighting")).toContainText("1 reported");
+  await expect(page.getByTestId("trail")).toHaveAttribute("data-played", "1");
 
   await page.goto(editUrl);
   await expect(page.getByTestId("owner-sighting")).toHaveCount(1);
@@ -38,7 +40,7 @@ test("optional photo, note and contact reach the owner but not the public", asyn
   await page.getByLabel(/Anything else/).fill("Trotting east on Donner Pass Rd");
   await page.getByLabel(/Your phone or email/).fill("reporter-555-0199");
   await page.getByRole("button", { name: "Send to the owner" }).click();
-  await expect(page.getByTestId("sighting-sent")).toBeVisible();
+  await expect(page.getByTestId("sighting-thanks")).toBeVisible();
 
   await page.goto(editUrl);
   const row = page.getByTestId("owner-sighting");

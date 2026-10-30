@@ -27,8 +27,10 @@ export async function rateLimit(key: string, limit: number, windowSeconds: numbe
     on conflict (key, window_start) do update set count = rate_limits.count + 1
     returning count
   `);
+  // postgres-js returns the rows; PGlite (the demo) wraps them in { rows }.
+  const list = (Array.isArray(rows) ? rows : (rows as unknown as { rows: { count: number }[] }).rows) ?? [];
   if (Math.random() < 0.02) {
     await db().execute(sql`delete from rate_limits where window_start < now() - interval '1 day'`);
   }
-  return Number(rows[0]?.count ?? 0) <= limit;
+  return Number(list[0]?.count ?? 0) <= limit;
 }

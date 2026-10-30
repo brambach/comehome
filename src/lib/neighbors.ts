@@ -93,6 +93,15 @@ export async function watchersCovering(p: LatLng): Promise<Watcher[]> {
   return rows.filter((w) => distanceM(w, p) <= w.radiusM);
 }
 
+/** Everyone signed up and confirmed. Public as a single total, never per place. */
+export async function networkSize(): Promise<number> {
+  const [row] = await db()
+    .select({ n: count() })
+    .from(watchers)
+    .where(and(isNotNull(watchers.confirmedAt), isNull(watchers.stoppedAt)));
+  return Number(row?.n ?? 0);
+}
+
 /** How many neighbors have been told about this pet. The only number public pages get. */
 export async function neighborsAlerted(petId: string): Promise<number> {
   const [row] = await db()

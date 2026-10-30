@@ -1,7 +1,7 @@
 /**
  * A pet's movement corridor as GeoJSON: where it started, every visible
  * sighting in time order, the path joining them, and a buffered hull around
- * the lot. Pure: same input, same output, no I/O. Rendered by PetMap and
+ * the lot. Pure: same input, same output, no I/O. Drawn by CorridorMap and
  * tested in tests/unit/corridor.test.ts.
  */
 import buffer from "@turf/buffer";

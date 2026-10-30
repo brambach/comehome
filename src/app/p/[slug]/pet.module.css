@@ -37,7 +37,7 @@
 }
 
 .name {
-  font-size: clamp(4rem, 21vw, 8rem);
+  font-size: clamp(4.25rem, 22vw, 8.5rem);
   overflow-wrap: anywhere;
   margin-block: 2px 6px;
 }
@@ -78,9 +78,110 @@
   max-width: var(--measure);
 }
 
-.note {
+.sightingNote {
   color: var(--ink-2);
   margin-top: 2px;
+}
+
+/* The flyer's top line, alive: spaced capitals, small, the one place they appear. */
+.label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.story {
+  display: grid;
+  gap: 14px;
+}
+
+.isHome {
+  display: block;
+  font-size: 0.5em;
+  line-height: 1.05;
+  margin-top: 0.08em;
+}
+
+.storyLine {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: start;
+  font-size: 1.1875rem;
+  color: var(--ink);
+}
+
+.storyLine svg {
+  color: var(--done);
+  margin-top: 2px;
+}
+
+.note {
+  font: 400 1.5rem/1.3 var(--font-display);
+  color: var(--ink);
+  max-width: var(--measure);
+  padding-left: 16px;
+  box-shadow: inset 2px 0 0 var(--line-strong);
+  white-space: pre-line;
+}
+
+.signals {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.signals li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.hints {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: var(--measure);
+  margin-top: 4px;
+}
+
+.hints li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.hints svg {
+  margin-top: 4px;
+}
+
+.sightings li[data-new] > p:first-child::after {
+  content: "New";
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  box-shadow: inset 0 0 0 1.5px var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: 2px;
+}
+
+.join {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding-block: 28px 8px;
+  margin-top: 16px;
+  max-width: calc(var(--measure) + 2 * var(--gutter));
+  margin-inline: 0;
 }
 
 .foot {

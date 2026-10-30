@@ -480,3 +480,38 @@ fieldset.field > legend {
     transform: none;
   }
 }
+
+/* ---------- checkbox row ---------- */
+
+.check {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 12px;
+  align-items: start;
+  cursor: pointer;
+}
+.check input {
+  width: 22px;
+  height: 22px;
+  margin: 1px 0 0;
+  accent-color: var(--primary);
+}
+.check > span {
+  display: grid;
+  gap: 4px;
+}
+.check .hint {
+  font-size: 0.9375rem;
+  color: var(--muted);
+}
+
+/* The live demo says so, once, at the top. */
+.demo-band {
+  background: var(--sunk);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  padding: 8px 0;
+}
+.demo-band .wrap {
+  display: block;
+}

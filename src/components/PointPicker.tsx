@@ -4,7 +4,8 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import type { Map as MlMap, Marker } from "maplibre-gl";
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_ZOOM, INCLINE_VILLAGE, SERVICE_BOUNDS } from "@/lib/geo";
-import { loadMapLibre, STYLE_URL } from "./maplibre";
+import { addInkPatterns, inkStyle } from "./inkStyle";
+import { loadMapLibre } from "./maplibre";
 import styles from "./PointPicker.module.css";
 
 type Point = { lat: number; lng: number };
@@ -43,7 +44,7 @@ export function PointPicker({
         if (cancelled || !box.current) return;
         const m = new maplibregl.Map({
           container: box.current,
-          style: STYLE_URL,
+          style: inkStyle(),
           center: hasCenter ? [centerLng!, centerLat!] : INCLINE_VILLAGE,
           zoom: hasCenter ? 13 : DEFAULT_ZOOM,
           maxBounds: [
@@ -54,6 +55,7 @@ export function PointPicker({
           cooperativeGestures: false,
         });
         map = m;
+        addInkPatterns(m);
         m.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
         // MapLibre positions the marker element with transform, so the shape lives in a child.
         const el = document.createElement("div");

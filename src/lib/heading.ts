@@ -29,7 +29,7 @@ const MIN_LEG_M = 40;
 const MAX_LEGS = 4;
 const MIN_AGREEMENT = 0.6;
 const STALE_MS = 48 * 3600_000;
-const MIN_REACH_M = 250;
+const MIN_REACH_M = 600;
 const MAX_REACH_M = 2000;
 
 const COMPASS = ["north", "northeast", "east", "southeast", "south", "southwest", "west", "northwest"];
@@ -73,14 +73,14 @@ export function likelyHeading(stops: readonly HeadingStop[], now: Date = new Dat
   if (agreement < MIN_AGREEMENT) return null;
   const bearing = ((Math.atan2(x, y) * 180) / Math.PI + 360) % 360;
 
-  // Pace from the same legs, projected over the time since the newest sighting (1 to 12 h).
+  // Pace from the same legs, projected over the next few hours: at least 4, or the time since the newest sighting, up to 12.
   const metres = legs.reduce((s, l) => s + l.m, 0);
   const hours = legs.reduce((s, l) => s + l.ms, 0) / 3600_000;
-  const elapsedH = Math.min(12, Math.max(1, (now.getTime() - last.t) / 3600_000));
+  const elapsedH = Math.min(12, Math.max(4, (now.getTime() - last.t) / 3600_000));
   const reachM = clamp((metres / hours) * elapsedH, MIN_REACH_M, MAX_REACH_M);
 
-  // Less agreement, wider cone: 20 degrees each side at best, 55 at worst.
-  const half = 20 + (1 - agreement) * (35 / (1 - MIN_AGREEMENT));
+  // Less agreement, wider cone: 25 degrees each side at best, 55 at worst.
+  const half = 25 + (1 - agreement) * (30 / (1 - MIN_AGREEMENT));
   const ring: [number, number][] = [[last.lng, last.lat]];
   const steps = 12;
   for (let i = 0; i <= steps; i++) {

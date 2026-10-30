@@ -30,6 +30,8 @@ export type FlyerData = {
   /** "Incline Village & North Shore", from areaName(). */
   area: string;
   photo: Buffer | null;
+  /** "Text a photo to (775) 555-0142 with JUNI4K": only when texting is set up. */
+  text?: { number: string; code: string } | null;
 };
 
 // Print in near-black on white: flyers get photocopied.
@@ -90,6 +92,11 @@ function Flyer({ data, qr }: { data: FlyerData; qr: string }) {
             <Text style={s.ask}>Seen {data.name}?</Text>
             <Text style={s.how}>Scan to drop a pin where. 30 seconds, no account.</Text>
             <Text style={s.url}>{data.shortUrl}</Text>
+            {data.text ? (
+              <Text style={s.how}>
+                Or text a photo to {data.text.number} with {data.text.code}
+              </Text>
+            ) : null}
             <Text style={s.note}>Please don&apos;t chase. Note where and when, and report it.</Text>
           </View>
         </View>
@@ -100,6 +107,7 @@ function Flyer({ data, qr }: { data: FlyerData; qr: string }) {
 
 export async function renderFlyer(data: FlyerData): Promise<Buffer> {
   registerFonts();
-  const qr = await QRCode.toDataURL(data.url, { errorCorrectionLevel: "M", margin: 1, width: 640 });
+  // ?f=1 counts the scan on the page: a weak signal that someone near a flyer cared enough to look.
+  const qr = await QRCode.toDataURL(`${data.url}?f=1`, { errorCorrectionLevel: "M", margin: 1, width: 640 });
   return renderToBuffer(<Flyer data={data} qr={qr} />);
 }
