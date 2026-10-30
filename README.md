@@ -1,8 +1,34 @@
+<div align="center">
+
 # comehome
 
-When a pet goes missing around Lake Tahoe, starting with Incline Village and the North Shore (Crystal Bay, Kings Beach, Tahoe Vista) and covering the rest of Tahoe and Truckee, the owner makes one shareable page in about five minutes: the last-known point, a photo, public sightings drawn as a movement corridor instead of one pin, and a QR flyer to print. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account.
+**One page for a lost pet, ready to share in five minutes. Neighbors report sightings without an account, and you see where your pet is heading.**
 
-![Juniper's page with 8 sightings](docs/screenshots/m3-corridor-mobile.png)
+[Why I built it](#why-i-built-it) · [What's in it](#whats-in-it) · [Run it](#run-it-locally) · [Deploy](#deploy-to-vercel) · [Privacy](#privacy)
+
+</div>
+
+<p align="center">
+  <img src="docs/readme/hero.jpg" alt="The comehome home page, Bring them home, next to Juniper's public page on a phone with the I saw this pet button" width="100%">
+</p>
+
+<p align="center">
+  <img src="docs/readme/trail.jpg" alt="Juniper's sightings drawn as a corridor along Donner Lake toward Truckee, next to the printable flyer with a QR code" width="100%">
+</p>
+
+<p align="center"><sub>Screenshots use the demo pet from <code>pnpm seed</code>. Juniper's photo is CC0 from Wikimedia Commons.</sub></p>
+
+The owner makes the page: last-known point, a photo, and a time. Strangers who land on it from a flyer or a Facebook group report a sighting in under 30 seconds, with no account. Each sighting goes on the map as a movement corridor instead of one more pin, so the owner knows where to search next.
+
+It starts in Incline Village and the North Shore (Crystal Bay, Kings Beach, Tahoe Vista), and pages work anywhere around Lake Tahoe and Truckee.
+
+> **Status.** Feature complete for a first version and tested end to end. It isn't hosted yet, so to try it you run it locally with the demo pet. [Deploy to Vercel](#deploy-to-vercel) covers what a live version needs.
+
+## Why I built it
+
+Boots is my family's cat, a black-and-white tuxedo. She went missing in Incline Village for about 50 days.
+
+My parents put up flyers and went through neighborhoods knocking on doors. That's why I built comehome: so the next family has one link to share, and every sighting lands on one map.
 
 ## What's in it
 
@@ -13,11 +39,11 @@ When a pet goes missing around Lake Tahoe, starting with Incline Village and the
 - **Flyer** (`/p/[slug]/flyer.pdf`): letter-size PDF with the photo, a huge name, a QR code and the short URL. See [`docs/flyer-sample.pdf`](docs/flyer-sample.pdf).
 - **Owner email** on each new sighting, and **mark found**, which shows a banner and closes the form.
 
-Out of scope for now: neighbor alerts (parked in [`docs/INTERVIEWS.md`](docs/INTERVIEWS.md)), accounts, payments, trackers, AI matching, native apps, an admin dashboard, and anywhere outside Tahoe.
+Out of scope for now: neighbor alerts (notes in [`docs/INTERVIEWS.md`](docs/INTERVIEWS.md)), accounts, payments, trackers, AI matching, native apps, an admin dashboard, and anywhere outside Tahoe.
 
 ## Stack
 
-Next.js 16 (App Router, TypeScript, pnpm) · Postgres via Drizzle (postgres-js) · MapLibre GL with OpenFreeMap tiles · Turf for the corridor · @react-pdf/renderer and qrcode for the flyer · sharp for EXIF stripping · Vercel Blob and Resend behind adapters · Vitest and Playwright · Instrument Serif and Instrument Sans via @fontsource · Bryce's shared design tokens, vendored in `vendor/design-tokens`.
+Next.js 16 (App Router, TypeScript, pnpm) · Postgres via Drizzle (postgres-js) · MapLibre GL with OpenFreeMap tiles · Turf for the corridor · @react-pdf/renderer and qrcode for the flyer · sharp for EXIF stripping · Vercel Blob and Resend behind adapters · Vitest and Playwright · Instrument Serif and Instrument Sans via @fontsource · my shared design tokens, vendored in `vendor/design-tokens`.
 
 ## Run it locally
 
