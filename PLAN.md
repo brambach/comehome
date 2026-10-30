@@ -64,6 +64,27 @@ docs/ (INTERVIEWS.md, screenshots/, flyer-sample.pdf)
 - **Rate limit by IP behind proxies.** Uses `x-forwarded-for` first hop; good enough for an MVP, noted in README.
 - **Playwright browser version.** The container ships Chromium 1194; config points at `/opt/pw-browsers` and never downloads.
 
+## The network (Oct 30)
+
+The page was step one. The product is a town's lost-pet network: get the right neighbors looking in the first hour, and turn what they see into a direction.
+
+- **Neighbor alerts** (`src/lib/neighbors.ts`). Neighbors sign up at `/neighbors` with a pin and a radius (half a mile, 1 or 2 miles), confirm from an email, and get one alert when a pet goes missing inside their radius. A sighting inside someone's radius alerts them too, at most once per pet per 12 hours. Three alerts a day per person, whatever happens. Everyone who was alerted hears when the pet is home. Stop links are HMAC-signed, so one tap stops them and nobody can stop someone else. Public pages only ever see a count.
+- **Text a sighting** (`src/lib/textReports.ts`, `/api/sms`). Twilio posts incoming texts; the signature is checked. A text has no location, so the photo is stored (through `stripExif`) and the reply links to `/r/[token]`, where they drop the pin with the photo attached. The flyer prints the number and the pet's code (`JUNI42`) when `TEXT_NUMBER_DISPLAY` is set.
+- **Likely heading** (`src/lib/heading.ts`). A cone from the newest sighting, pointing along the weighted circular mean of the last few legs. Hidden when the legs disagree, when there are fewer than two real legs, or when the trail is 48 hours cold. It knows nothing about roads, water or hills, and the page says so.
+- **Dusk** (`src/lib/sun.ts`). Tonight's sunset (or tomorrow's sunrise), because that's when scared pets move.
+- **Shelters and vets** (`/lost`, `/feed.json`, `/feed.xml`). Every open page, newest activity first. Locations rounded to about 100 m.
+- **Flyer scans.** The QR code opens the page with `?f=1`, which bumps a counter. Nothing else is stored.
+
+## Design: the flyer comes alive
+
+- **The map is one ink on paper** (`src/components/inkStyle.ts`): OpenFreeMap vector tiles drawn as an engraving, with a hatched lake, double-line roads and stippled woods. No tile colors compete with the pet's photo.
+- **The trail is SVG over the map** (`src/components/CorridorMap.tsx`), projected through MapLibre on every move. It keeps working on bare paper if tiles never load.
+- **Motion the product causes, played once:** the pen draws the trail when it scrolls into view; on a return visit only what's new draws (remembered per pet in localStorage); a sighting you just sent drops in with the one overshoot and the route reaches out to it; marking found closes the route with one stroke in the done color. Reduced motion shows the finished drawing.
+
+## Live demo
+
+`DEMO=1` swaps Postgres for PGlite (Postgres compiled to WASM) in memory. `src/instrumentation.ts` migrates and seeds it on every cold start with `src/lib/demo/seed.ts`: Juniper lost by Burnt Cedar Beach with 8 sightings drifting east, Pepper in Kings Beach, Mochi already home, and 41 made-up neighbors. Uploads stay in memory (`STORAGE_DRIVER=memory`) and mail goes to the console. A band at the top says it's a demo.
+
 ## Out of scope
 
-See the non-goals in the brief and the "Pending interviews" list in `docs/INTERVIEWS.md`. Nothing is built for neighbor alerts.
+See the non-goals in the brief and the "Pending interviews" list in `docs/INTERVIEWS.md`.
